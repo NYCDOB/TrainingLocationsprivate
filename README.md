@@ -1,6 +1,6 @@
-# Training Locations
+# Safety Training Sites and Courses
 
-## Applications Enhancements
+## Application Enhancements
 
 -Fix Feedback link on responsive
 
