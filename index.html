@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="icon" type="image/png"  href="logo.png">
+	<link rel="icon" type="image/png"  href="images/logo.png">
     <link href='https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.css' rel='stylesheet' type='text/css'/>
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/opencagedata/leaflet-opencage-search@d4cbd36122efc8d17152b4177ed0e12165305441/dist/css/L.Control.OpenCageData.Search.min.css" />	
 	<link rel="stylesheet" type='text/css' href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
@@ -23,8 +23,13 @@
 			color: red;
 			}
 
+		.clearBtn, .fltr_btn {
+			float: right;
+		}
+
+
 		.fltr_btn:hover {
-			text-shadow:1px 1px 3px black
+			text-shadow:1px 1px 3px black;
 		}
 
 		.glyphicon-info-sign	{
@@ -242,13 +247,9 @@
 		.zoomed {
 			background-color: #e0e0e0;
 		}
-			
-			
 		.searchZoomed {
 			background-color: #e0e0e0;
 		}
-
-
 		/* tr:not(.zoomed) {  */
 		tr:not(.zoomed):not(.searchZoomed) {  
 			background-color: transparent;
@@ -257,11 +258,10 @@
 		@media (max-width: 600px) {
 			li {
 				text-align: center !important;
-				font-size: .75em;
-				
+				font-size: .65em;				
 			}
-			.fltr_btn {
-				float: left !important;
+			.fltr_btn, .clearBtn {
+					float:none !important;
 			}
 			div.tooltip {
 				display: none;					
@@ -283,7 +283,7 @@
 	<header>
 			  <nav class="navbar navbar-fixed-top" role="navigation" style="background-color:#e87800;border:solid 1px gray">
 				<ul class="nav navbar-brand" >
-						<li>COURSE TRAINING LOCATIONS</li>
+						<li style="margin-top:5px">COURSE TRAINING LOCATIONS</li>
 				</ul>
 				<div class="navbar-collapse collapse ">
 							<a class="logo" href="https://www1.nyc.gov/site/buildings/safety/sst-safety.page" target="_blank"> </a>				
@@ -397,13 +397,13 @@
 														<option value="Spanish">Spanish</option>
 														<option value="Urdu">Urdu</option>										
 												</select>
-								<button class="pull-right fltr_btn" id="submit_btn">Search</button>
+								<button class="fltr_btn" id="submit_btn">Search</button>
 							</form>								
 					</div>  <!-- end frame around search  -->
 				</div>
 				<div class="col-md-4" > 
 							<!--  <button class="filterBtn" title="Search"   id="fltr_btn" > APPLY </button>   -->
-							<button class=" clearBtn pull-right"  id="clr_btn" style="margin-top: 10px "> Reset All </button>
+							<button class="clearBtn"  id="clr_btn" style="margin-top: 10px "> Reset All </button>
 				</div>
 	</div>
 
@@ -447,11 +447,9 @@
 
 								<div id="loadpage"> 
 									  <p align="center" style="font-size: large;">       
-										<b>Loading ... Please wait!</b><br/><br/><img src="spinner.gif">
+										<b>Loading ... Please wait!</b><br/><br/><img src="images/spinner.gif">
 									  </p>
 								</div>	
-
-
 								<table id="locationTable" class="tree" style="visibility:hidden;">	
 											<!--  placeholder for dynamic table content -->
 								</table>
