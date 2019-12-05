@@ -272,7 +272,12 @@ d3.csv("data/CourseTrainingLocations.csv", function(data) {
 								rowCollapse(vTargetRow);
 						}	
 					}			
-		})
+		})		
+		$("#locationTable").on("click", "tr", function(event){   //per John request, when select entire BORO line, expand it
+			if (this.nextSibling ) {
+				this.nextSibling.scrollIntoView();
+			}
+		})			
 		$("#locationTable").on("click", "tr[level='1'] span:nth-child(3)", function(event){
 			vClickedPoints = document.querySelectorAll('.clickedPoint');
 			for (let ctr=0,thelength=vClickedPoints.length; ctr < thelength;ctr++) {
