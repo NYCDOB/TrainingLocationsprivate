@@ -6,15 +6,15 @@
 
 -Add Provider, Address and Courses offered in map point popup
 
--Show Provider Info 1x per course
+-Show Provider Info only once per course
 
 -Borough row selection toggles expand and collapse
 
--Decrease zoom when select address in table
+-Decrease map zoom when select address in table in order to show more of surrounding area
 
--Expand all courses when select address in table
+-Expand tree to show all courses when select address in table
 
--Optimize font size and color in table to easier differentiate sections
+-Optimize font size and color in table to differentiate sections
 
 -Scroll address into view in table when select map point
 
@@ -22,7 +22,7 @@
 
 -Remove tooltip popup on mobile devices
 
--Remove word "Filter" from search box
+-Remove the word "Filter" from search box
 
 -Enhance search box style
 
@@ -37,6 +37,10 @@
 -Mouse over color for table row is grey
 
 -Address selection in table has distinct background color
+
+-Remove "expand all" and "collapse all" buttons from table
+
+-Add info link to DOB Approved Courses and Requirements site
 
 
 
