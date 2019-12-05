@@ -1,0 +1,26 @@
+.tbltree-indent {width:24px; height: 20px; display: inline-block; position: relative;}
+
+.tbltree-expander {width:24px; height: 19px; display: inline-block; position: relative; cursor: pointer;}
+
+/*  .tbltree-expander-expanded{background-image: url(images/minus.png); }   */
+/*  .tbltree-expander-collapsed{background-image: url(images/plus.png);}    */
+
+.tbltree-expander-expanded{
+	background-image: url('https://datatables.net/examples/resources/details_close.png');
+	background-repeat: no-repeat;
+}  
+
+.tbltree-expander-collapsed{
+	background-image: url('https://datatables.net/examples/resources/details_open.png');
+	background-repeat: no-repeat;	
+}  
+
+
+
+.tbltree-level-pickers {float: left;}
+.tbltree-level-pickers .tbltree-level-item {cursor: pointer;}
+.tbltree-count-wrap {
+	font-style: italic;
+	font-size: 10px;
+	float: right;
+}
