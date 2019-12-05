@@ -1,6 +1,6 @@
 # Training Locations
 
-## Applications Enhancements##
+## Applications Enhancements
 
 -Fix Feedback link on responsive
 
