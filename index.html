@@ -254,19 +254,6 @@
 		tr:not(.zoomed):not(.searchZoomed) {  
 			background-color: transparent;
 		}
-		/* @media (max-width: 750px) { */
-		@media (max-width: 600px) {
-			li {
-				text-align: center !important;
-				font-size: .65em;				
-			}
-			.fltr_btn, .clearBtn {
-					float:none !important;
-			}
-			div.tooltip {
-				display: none;					
-			}	
-		}
 	.textSearchResults {
 		display: none;
 		color: red;
@@ -276,7 +263,25 @@
 	.notMatched {
 		display: none !important;
 	}
-}		
+	@media (max-width: 991px) {
+		.feedback {
+				float: none !important;
+		}
+	}
+
+	@media (max-width: 600px) {
+		li {
+			text-align: center !important;
+			font-size: .65em;				
+		}
+		.fltr_btn, .clearBtn {
+				float:none !important;
+		}
+		div.tooltip {
+			display: none;					
+		}	
+	}
+		
 </style>
 <body>
 <div class="container-fluid">
@@ -459,13 +464,19 @@
 	</div> 
 	<footer>
 	<div class="row" style="margin-top: 5px">
-		<div class="col-md-12">
-		
-			<div class="pull-left">Built by DOB Analytics <a target="_blank" href="https://www1.nyc.gov/site/buildings/about/metrics-reports.page">Dev Squad</a></div>
-			<div class="pull-right"><span style="float:right"><a target="_blank" href="https://www.surveymonkey.com/r/W35368J">Feedback</a></span></div>
+		<div class="col-md-8">
+			Built by DOB Analytics <a target="_blank" href="https://www1.nyc.gov/site/buildings/about/metrics-reports.page">Dev Squad</a>
 		</div>
+		
+		<div class="col-md-2 ">
+			Last Updated 2/24/2020
+		</div>
+		<div class="col-md-2 ">
+			<div class="pull-right feedback"><a target="_blank" href="https://www.surveymonkey.com/r/W35368J">Feedback</a></div>
+		</div>		
 	</div>
 	</footer>
+
 </div>  <!--  end main container fluid -->
 <!-- ****************************************************************************************************** -->
 <!-- 												JS RESOURCES											-->
