@@ -42,5 +42,5 @@
 
 -Add info link to DOB Approved Courses and Requirements site
 
-
+-Add "Updated on mm/dd/yyyy" 2/26/2019
 
