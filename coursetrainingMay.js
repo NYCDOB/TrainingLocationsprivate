@@ -354,7 +354,7 @@ d3.csv("data/CourseTrainingLocationsMay.csv", function(data) {
 					( document.querySelector(".zoomed") ) ?  document.querySelector(".zoomed").classList.remove("zoomed") : 0;
 					pointsOverlay.addTo(map);
 					map.setView(defaultLatLng, 10);
-					$(this).attr("title","Search");					
+					$(this).attr("title","Reset All");					
 					manualCollapse(removeZoomed=true)
 					$(".notFoundRow").css("display","none") ;
 					$(".searchZoomed").removeClass("searchZoomed");
