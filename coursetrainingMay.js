@@ -65,6 +65,10 @@
 		   map.setView(defaultLatLng, 10); 
 		 }}
 	function zoomTo(latlong){
+			if (latlong[0]==0 && latlong[1]==0){
+				return;
+			}
+		
 			//map.setView(latlong,20);
 			map.setView(latlong,15);  //requested by John D.  Need to see other points around location
 			document.querySelectorAll('svg g circle[latlng="'+latlong[0]+ ','+latlong[1]+'"]').forEach( (el) => { el.classList.add("clickedPoint")}  )}
@@ -234,6 +238,7 @@ if (! L.Browser.touch && ! L.Browser.android) {
 	});  //end pointsOverlay definition
 							
 //d3.csv("data/CourseTrainingLocations.csv", function(data) {
+//d3.csv("data/CourseTrainingLocations20200520a.csv", function(data) {
 d3.csv("data/CourseTrainingLocationsMay.csv", function(data) {
 	if (!data) {  //when there is a problem with the returned data
 			let element = document.createElement("h3");
@@ -540,11 +545,15 @@ d3.csv("data/CourseTrainingLocationsMay.csv", function(data) {
 			let boroughlocationcoursedatetimestartentryset = new Set();
 			let firstlocationcourse=true;
 			let providerInfo='';
-			var qqq=document.createElement("i");
-			qqq.classList.add("fa","fa-globe");
-			qqq.setAttribute("title","Online");
-			qqq.style.fontSize="1.2em";
-			qqq.style.color="blue";
+
+var qqq=document.createElement("i");
+qqq.classList.add("fa","fa-globe");
+qqq.setAttribute("title","Online");
+qqq.style.fontSize="1.2em"
+qqq.style.color="blue"
+
+
+
 			let alldata2 = keyArray.map(function(q, indexNum, array) {  //q=current element in array of keys
 				
 				//get the matching datarow
@@ -600,13 +609,19 @@ d3.csv("data/CourseTrainingLocationsMay.csv", function(data) {
 							" (" +
 							((d.Instructor)? d.Instructor:"(tbd)") +
 							") ");  
+//"<i class='fa fa-globe' title='online' style='font-size:1.2em;color:blue'></i>"   )
+																
+
+							
 							newSpan2.appendChild(newText2);
 							if(  d["Web Address"].toLowerCase().charAt(0)=="y") {
 								//newSpan2.appendChild(qqq);
 								true;
 							}
+							
 							newCell.appendChild(newSpan1);
 							newCell.appendChild(newSpan2);
+							
 							newRow.setAttribute("row-id",q);
 							newRow.setAttribute("parent-id",d.Borough+"__"+d.TrainingLocationID+"__"+d.CourseID);newRow.id=q;				
 							firstlocationcourse=false;
