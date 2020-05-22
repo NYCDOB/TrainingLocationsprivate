@@ -517,7 +517,7 @@ d3.csv("data/CourseTrainingLocationsMay.csv", function(data) {
 				document.querySelector("#ood").style.display="block";
 				var mm=Math.floor(Math.random()*10);
 				var q=(mm<4)?"All Courses Shown Are Online":(mm<8)?"Everywhere":"Anywhere";
-				document.querySelector("#ood span").textContent= q+"!";
+				document.querySelector("#ood span").textContent= q;
 				return;
 				}
 			polyline = L.polyline(latLngs,{opacity:0}).addTo(map);
