@@ -508,7 +508,7 @@ d3.csv("data/CourseTrainingLocationsMay.csv", function(data) {
 				$(".notFoundSST").empty().append($("#dropdownSST option:selected").text());
 				$(".notFoundLanguage").empty().append($("#dropdownLanguages option:selected").text());
 				$('.notFoundRow').show();
-				document.querySelector("#ood").style.display="block";
+				document.querySelector("#ood").style.display="none";
 				map.setView(defaultLatLng, 10);
 			}
 		else {  // matching courses
