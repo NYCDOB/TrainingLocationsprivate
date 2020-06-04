@@ -6,7 +6,7 @@
 		 return (theTime == "" ? "0000":theTime.split(' ')[1][0]=="P" && theTime.split(' ')[0].split(':')[0]!=12) ? "" +
 		 (parseInt(theTime.split(' ')[0].split(':')[0])+12) + "" + theTime.split(' ')[0].split(':')[1] : ""+ theTime.split(' ')[0].split(':')[0] < 10 ? '0' +
 		 theTime.split(' ')[0].split(':')[0] + theTime.split(' ')[0].split(':')[1] : theTime.split(' ')[0].split(':')[0] + "" + theTime.split(' ')[0].split(':')[1]}
-	function manualExpand( theLocation,vZoomedFromSearch=true) { 
+	function manualExpand( theLocation,vZoomedFromSearch) { 
 		var locationParent=document.querySelector("[id*="+theLocation +"]").getAttribute("parent-id");
 		document.querySelector("tr[row-id='"+locationParent+"']" ).classList.replace("tbltree-collapsed","tbltree-expanded");
 		document.querySelector("tr[row-id='"+locationParent+"']" ).setAttribute("tree-state","shown");
