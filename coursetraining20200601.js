@@ -5,12 +5,12 @@
 	function convertTime(theTime) {
 		 return (theTime == "" ? "0000":theTime.split(' ')[1][0]=="P" && theTime.split(' ')[0].split(':')[0]!=12 ? ""+(parseInt(theTime.split(' ')[0].split(':')[0])+12) + "" + theTime.split(' ')[0].split(':')[1] : ""+theTime.split(' ')[0].split(':')[0] < 10 ? '0'+ theTime.split(' ')[0].split(':')[0] + theTime.split(' ')[0].split(':')[1] : theTime.split(' ')[0].split(':')[0]+""+theTime.split(' ')[0].split(':')[1]  )}
 	function manualExpand( theLocation,vZoomedFromSearch=true) { 
-	let locationParent=document.querySelector("[id*="+theLocation +"]").getAttribute("parent-id");
+		var locationParent=document.querySelector("[id*="+theLocation +"]").getAttribute("parent-id");
 		document.querySelector("tr[row-id='"+locationParent+"']" ).classList.replace("tbltree-collapsed","tbltree-expanded");
 		document.querySelector("tr[row-id='"+locationParent+"']" ).setAttribute("tree-state","shown");
 		document.querySelector("tr[row-id='"+locationParent+"'] .tbltree-expander" ).classList.replace("tbltree-expander-collapsed","tbltree-expander-expanded");
 		$('#locationTable').tbltree('expand', locationParent);
-		let thisLocation=document.querySelector("[id*="+theLocation +"]").getAttribute("row-id");
+		var thisLocation=document.querySelector("[id*="+theLocation +"]").getAttribute("row-id");
 		document.querySelector("tr[row-id='"+thisLocation+"']" ).classList.replace("tbltree-collapsed","tbltree-expanded");
 		document.querySelector("tr[row-id='"+thisLocation+"']" ).setAttribute("tree-state","shown")	;
 		document.querySelector("tr[row-id='"+thisLocation+"'] .tbltree-expander" ).classList.replace("tbltree-expander-collapsed","tbltree-expander-expanded");
@@ -31,18 +31,18 @@
 		( vTargetRowElement.nextSibling.style.display="none" ) || 0; 
 		$('#locationTable').tbltree('collapse', vTargetRowElement.getAttribute("row-id")); }
 	function collapseAll() {
-		let expandedRows = document.querySelectorAll(".tbltree-expanded") ;   
+		var expandedRows = document.querySelectorAll(".tbltree-expanded") ;   
 		for (i=0; i<expandedRows.length; i++){  
-				let theRow = expandedRows[i].getAttribute("row-id"); 
+				var theRow = expandedRows[i].getAttribute("row-id"); 
 				$('#locationTable').tbltree('collapse', theRow);
 				expandedRows[i].classList.replace("tbltree-expanded","tbltree-collapsed");	
 				expandedRows[i].setAttribute("tree-state","hidden");
 				expandedRows[i].getElementsByTagName("span")[1].classList.replace("tbltree-expander-expanded","tbltree-expander-collapsed"); }}
 	function manualCollapse(removeZoomed=true) {
 		(removeZoomed) ? removeZoomedClass() : null;
-		let expandedRows = document.querySelectorAll("tr[class='tbltree-expanded'][is-leaf='false']");  //get the tbl tree rows
+		var expandedRows = document.querySelectorAll("tr[class='tbltree-expanded'][is-leaf='false']");  //get the tbl tree rows
 		for (i=0; i<expandedRows.length; i++){  
-				let theRow = expandedRows[i].getAttribute("row-id"); 
+				var theRow = expandedRows[i].getAttribute("row-id"); 
 				$('#locationTable').tbltree('collapse', theRow);
 				expandedRows[i].classList.replace("tbltree-expanded","tbltree-collapsed")	;
 				expandedRows[i].setAttribute("tree-state","hidden");
@@ -58,8 +58,8 @@
 		//onlinecheck=false;
 		}
 	function removeZoomedClass() {
-		let vZoomed=document.querySelector("tr[level='1'].zoomed");
-		let vSearchZoomed=document.querySelector("tr[level='1'].searchZoomed");
+		var vZoomed=document.querySelector("tr[level='1'].zoomed");
+		var vSearchZoomed=document.querySelector("tr[level='1'].searchZoomed");
 		if (vZoomed) { vZoomed.classList.remove("zoomed") }	;	
 		(vSearchZoomed) ? vSearchZoomed.classList.remove("searchZoomed") : 0;
 		if (vZoomed || vSearchZoomed) {
@@ -102,12 +102,12 @@ control.markGeocode = function (result) {
                 this._map.removeLayer(this._geocodeMarker);
             }
 			
-			let popupDiv=document.createElement("div");
-			let locationText = document.createElement("h5");
+			var popupDiv=document.createElement("div");
+			var locationText = document.createElement("h5");
 			locationText.innerText = result.name;
-			let closeMarkerDiv = document.createElement("div")
+			var closeMarkerDiv = document.createElement("div")
 			closeMarkerDiv.style.textAlign = "center";
-			let closeMarkerDivButton = document.createElement("button");
+			var closeMarkerDivButton = document.createElement("button");
 			closeMarkerDivButton.innerText="Remove";
 			closeMarkerDivButton.setAttribute("title","Remove marker from map");		
 			closeMarkerDivButton.setAttribute("type","button");
@@ -129,8 +129,8 @@ true;
 
 function removeSearchMarkers () {
 	markerElements=["leaflet-shadow-pane","leaflet-marker-pane","leaflet-popup-pane"]
-	for(let i=0; i<markerElements.length; i++) {
-			let markerElement=document.querySelector("."+markerElements[i]+" :first-child");
+	for(var i=0; i<markerElements.length; i++) {
+			var markerElement=document.querySelector("."+markerElements[i]+" :first-child");
 			(markerElement) ? markerElement.remove(): null;
 	}
 }
@@ -173,14 +173,14 @@ function removeSearchMarkers () {
 			.on('click', function(d){
 				
 					vClickedPoints = document.querySelectorAll('.clickedPoint');
-					for (let ctr=0,thelength=vClickedPoints.length; ctr < thelength;ctr++) {
+					for (var ctr=0,thelength=vClickedPoints.length; ctr < thelength;ctr++) {
 						vClickedPoints[ctr].classList.remove("clickedPoint");
 					}
 																				
 					this.classList.add("clickedPoint")	
-					let vLocationCourses=document.querySelectorAll("tr[parent-id$='"+ d.locID    +"']");
-					let vToolTipCourses='';					
-					for (let i=0; i < vLocationCourses.length;i++) {
+					var vLocationCourses=document.querySelectorAll("tr[parent-id$='"+ d.locID    +"']");
+					var vToolTipCourses='';					
+					for (var i=0; i < vLocationCourses.length;i++) {
 						vToolTipCourses += "<br><span>&emsp;&bull; "+vLocationCourses[i].innerText+"</span>";
 					}
 					vToolTipCourses=
@@ -231,18 +231,18 @@ if (! L.Browser.touch && ! L.Browser.android) {
 //d3.csv("data/CourseTrainingLocations.csv", function(data) {
 d3.csv("data/CourseTrainingLocations20200601.csv", function(data) {
 	if (!data) {  //when there is a problem with the returned data
-			let element = document.createElement("h3");
+			var element = document.createElement("h3");
 			element.appendChild(document.createTextNode("No Data Available"))
 			element.style.textAlign="center";
 			document.querySelector("#locationTable").appendChild(element);
 	} else {
 		
-		let boros=["Bronx","Brooklyn", "Manhattan","Queens","Staten Island","Outside NYC","WEB",]
-		let justKeys = data.map( (d) => { 
-						let latlngArr=	 (  !isNaN(parseInt(d.Lat)) &&  !isNaN(parseInt(d.Long)) ) ?  [+d.Lat,+d.Long] : [+0,+0] ;
+		var boros=["Bronx","Brooklyn", "Manhattan","Queens","Staten Island","Outside NYC","WEB",]
+		var justKeys = data.map( (d) => { 
+						var latlngArr=	 (  !isNaN(parseInt(d.Lat)) &&  !isNaN(parseInt(d.Long)) ) ?  [+d.Lat,+d.Long] : [+0,+0] ;
 						d.latLng =latlngArr   //[+d.Lat,+d.Long];;						
-						let newStartDate=convertDate(d["Start Date"]);
-						let newStartTime = convertTime(d["Start Time"]);
+						var newStartDate=convertDate(d["Start Date"]);
+						var newStartTime = convertTime(d["Start Time"]);
 						d.Borough = ( !d.Borough ) ? "Unknown" : d.Borough.trim();//account for empty boro
 						d.newBoro=( d.Borough) ? boros.indexOf(d.Borough)+1 : 99; //99=unknown boro
 						d.key=	d.newBoro + d.TrainingLocationID +d.CourseID  +	newStartDate + newStartTime +d.Instructor +	d.Entry;
@@ -256,14 +256,14 @@ d3.csv("data/CourseTrainingLocations20200601.csv", function(data) {
 		}) ;
 		pointsOverlay.addTo(map);
 		justKeys.sort();
-		let languages = ["Arabic","Bengali","Chinese (Cantonese/Mandarin)","English","Hatian Creole",
+		var languages = ["Arabic","Bengali","Chinese (Cantonese/Mandarin)","English","Hatian Creole",
 			"Georgian","Hindi","Italian","Korean","Polish","Punjabi","Russian","Spanish","Urdu"];
 		buildTblTreeElements(data, justKeys, languages);  
 		$("#locationTable").tbltree(  
 						{initState: "collapsed"});
 		$("#locationTable").on("click", "tr[level='0']", function(event){ 
 					if (!  event.target.classList.contains("tbltree-expander")  ) {
-						let vTargetRow=document.querySelector("[row-id='"+   this.closest("tr").getAttribute("row-id") +  "']");
+						var vTargetRow=document.querySelector("[row-id='"+   this.closest("tr").getAttribute("row-id") +  "']");
 						if ( vTargetRow.classList.contains("tbltree-collapsed")  ) {
 								rowExpand(vTargetRow); 
 						} else {
@@ -281,16 +281,16 @@ d3.csv("data/CourseTrainingLocations20200601.csv", function(data) {
 		})		
 		$("#locationTable").on("click", "tr[level='1'] span:nth-child(3)", function(event){
 			vClickedPoints = document.querySelectorAll('.clickedPoint');
-			for (let ctr=0,thelength=vClickedPoints.length; ctr < thelength;ctr++) {
+			for (var ctr=0,thelength=vClickedPoints.length; ctr < thelength;ctr++) {
 				vClickedPoints[ctr].classList.remove("clickedPoint");
 			}
-			let vParentRow = event.target.closest("tr[level='1']");
+			var vParentRow = event.target.closest("tr[level='1']");
 			if (! vParentRow.classList.contains("zoomed") ) { 
 				( document.querySelector(".zoomed") ) ?  document.querySelector(".zoomed").classList.remove("zoomed") : 0; 
 				vParentRow.classList.add("zoomed") 
-				let vLocationID =  vParentRow.getAttribute("id")
-				let vTargetLatLng=null;
-				for ( let ctr=0;ctr<data.length;ctr++) { 
+				var vLocationID =  vParentRow.getAttribute("id")
+				var vTargetLatLng=null;
+				for ( var ctr=0;ctr<data.length;ctr++) { 
 						if (     data[ctr].TrainingLocationID== vLocationID.substring( vLocationID.indexOf('__')+2 )) {
 								vTargetLatLng=data[ctr].latLng;
 								break;
@@ -338,12 +338,12 @@ d3.csv("data/CourseTrainingLocations20200601.csv", function(data) {
 					$(".notFoundRow").css("display","none") ;
 					$(".searchZoomed").removeClass("searchZoomed");
 					$(".zoomed").removeClass("zoomed");
-					let zoomedLocation=document.querySelectorAll("tr[level='1'].zoomed");
+					var zoomedLocation=document.querySelectorAll("tr[level='1'].zoomed");
 					( document.querySelector(".leaflet-popup-pane").firstChild != null   ) 
 					&& L.Control.OpenCageSearch.instance._map.removeLayer(L.Control.OpenCageSearch.instance._geocodeMarker);  });  //end clear map+table event
 			
 			function filterQry(selectedCourse, selectedSST, selectedLanguage){
-					let selectedCourse_cpID = data.filter(function(d, index, arrayName){
+					var selectedCourse_cpID = data.filter(function(d, index, arrayName){
 									return (	(d.CourseID == selectedCourse^selectedCourse=="allCourses") &&
 												((selectedSST=="sstYes" && d.SST=="Y"?1:0) + (selectedSST=="sstNo" && d.SST=="N"?1:0)+(selectedSST=="sstAll" ? 1:0)==1)  &&
 												( selectedLanguage == "all" || d.Language==selectedLanguage)
@@ -354,7 +354,7 @@ d3.csv("data/CourseTrainingLocations20200601.csv", function(data) {
 							map.removeLayer(pointsOverlay); 
 							pointsOverlay.addTo(map);	
 							collapseAll(); 
-							let allCoursesFiltered = selectedCourse_cpID.length == data.length ?  true: false;
+							var allCoursesFiltered = selectedCourse_cpID.length == data.length ?  true: false;
 							if ( allCoursesFiltered )  {
 								map.setView(defaultLatLng, 10);
 								$(".searchZoomed").removeClass("searchZoomed");	
@@ -364,24 +364,24 @@ d3.csv("data/CourseTrainingLocations20200601.csv", function(data) {
 											document.querySelector(".textSearchResults").style.display="block" //"inline" ;
 								}			
 								zoom(latLngs);
-								let vBoros=new Set();
-								let vLocations=new Set();
-								let vCourses=new Set();	
-								let fullkey=new Set();
+								var vBoros=new Set();
+								var vLocations=new Set();
+								var vCourses=new Set();	
+								var fullkey=new Set();
 								selectedCourse_cpID.map ( function (item, index) {
 										vBoros.add(item.Borough); 
 										vLocations.add(item.TrainingLocationID);
 										vCourses.add(item.TrainingLocationID+'__'+item.CourseID);
-										let newStartDate=convertDate(item["Start Date"]);
-										let newStartTime = convertTime(item["Start Time"]);
-										let boros=["Bronx","Brooklyn", "Manhattan","Queens","Staten Island","Outside NYC",]	
+										var newStartDate=convertDate(item["Start Date"]);
+										var newStartTime = convertTime(item["Start Time"]);
+										var boros=["Bronx","Brooklyn", "Manhattan","Queens","Staten Island","Outside NYC",]	
 										newBoro=( item.Borough ) ? boros.indexOf(item.Borough)+1 : 99;  //99=unknown boro
 										fullkey.add(newBoro + item.TrainingLocationID +item.CourseID  +	newStartDate + newStartTime +item.Instructor +	item.Entry);
 								})
-								let vCoursesTable = document.querySelector("#locationTable");						
-								let theparent='', loc='zzz';
+								var vCoursesTable = document.querySelector("#locationTable");						
+								var theparent='', loc='zzz';
 
-								for (let i=0, totRows=vCoursesTable.rows.length; i < totRows; i++ ) {
+								for (var i=0, totRows=vCoursesTable.rows.length; i < totRows; i++ ) {
 										theparent="";
 										if ( vCoursesTable.rows[i].getAttribute("level")=="0" &&  !vBoros.has(vCoursesTable.rows[i].getAttribute("id")) ) {
 											vCoursesTable.rows[i].classList.add("notMatched") ;
@@ -434,7 +434,7 @@ d3.csv("data/CourseTrainingLocations20200601.csv", function(data) {
 
 	function resetMapArrays(sourceArray) { 
 		latLngs = sourceArray.map(function(d){				
-						let obj={};
+						var obj={};
 						obj["latLng"] = [+d.Lat,+d.Long];
 						obj["full_Address"] = d.Location.toUpperCase();
 						obj["locID"] = [d.TrainingLocationID];
@@ -468,69 +468,69 @@ d3.csv("data/CourseTrainingLocations20200601.csv", function(data) {
 		map.invalidateSize();	});  //end of map resize event	
 
 	function buildTblTreeElements(data, keyArray, languages) {			
-			let doTitleCase = function (theString) {  
+			var doTitleCase = function (theString) {  
 				theString = theString.replace(/\W\S/g, function(t) 
 							{return t.toUpperCase() }); 
 				return theString.replace("\&","and" )};
-			let tableRef = document.querySelector("#locationTable")
-			let boroughsset = new Set();
-			let boroughlocationset = new Set();
-			let boroughlocationcourseset = new Set();
-			let boroughlocationcoursedatetimestartentryset = new Set();
-			let firstlocationcourse=true;
-			let providerInfo='';
+			var tableRef = document.querySelector("#locationTable")
+			var boroughsset = new Set();
+			var boroughlocationset = new Set();
+			var boroughlocationcourseset = new Set();
+			var boroughlocationcoursedatetimestartentryset = new Set();
+			var firstlocationcourse=true;
+			var providerInfo='';
 			var vglobe=document.createElement("i");
 			vglobe.classList.add("fa","fa-globe");
 			vglobe.setAttribute("title","Online");
 			vglobe.style.fontSize="1.2em"
 			vglobe.style.color="blue"
-			let alldata2 = keyArray.map(function(q, indexNum, array) {  //q=current element in array of keys
-				let indexNumber=null;				
-				for (let ctr = 0, sizer=data.length; ctr<sizer; ctr++) {
+			var alldata2 = keyArray.map(function(q, indexNum, array) {  //q=current element in array of keys
+				var indexNumber=null;				
+				for (var ctr = 0, sizer=data.length; ctr<sizer; ctr++) {
 					if ( data[ctr].key == q    ) {
 						indexNumber = ctr;
 						break;}}
 				var d = data[indexNumber];	
-				let trimBorough = d.Borough.trim();
-				let trimLocationID=d.TrainingLocationID.trim();
-				let trimCourseID=d.CourseID.trim();
+				var trimBorough = d.Borough.trim();
+				var trimLocationID=d.TrainingLocationID.trim();
+				var trimCourseID=d.CourseID.trim();
 				if ( !boroughsset.has(d.Borough) ) {  
 						boroughsset.add(d.Borough);
-						let newRow =tableRef.insertRow(-1);let newCell = newRow.insertCell(0);let newB = document.createElement('b');let newText = document.createTextNode(d.Borough);
+						var newRow =tableRef.insertRow(-1);var newCell = newRow.insertCell(0);var newB = document.createElement('b');var newText = document.createTextNode(d.Borough);
 						newCell.appendChild(newB);newB.appendChild(newText);newRow.setAttribute("row-id",d.Borough);newRow.id=d.Borough;} 
 				if ( !boroughlocationset.has(d.Borough+"__"+d.TrainingLocationID)    ) { 
 					boroughlocationset.add(d.Borough+"__"+d.TrainingLocationID);	
-					let newRow =tableRef.insertRow(-1);	let newCell = newRow.insertCell(0);let newText = document.createTextNode(d.Street +( (d.newBoro == 6 ) ? " ("+d.City+ ", " + d.State +")": "" ));
-					let newSpan=document.createElement("span");newCell.appendChild(newSpan);newSpan.appendChild(newText);newRow.setAttribute("row-id",d.Borough+"__"+d.TrainingLocationID);newRow.setAttribute("parent-id",d.Borough);
+					var newRow =tableRef.insertRow(-1);	var newCell = newRow.insertCell(0);var newText = document.createTextNode(d.Street +( (d.newBoro == 6 ) ? " ("+d.City+ ", " + d.State +")": "" ));
+					var newSpan=document.createElement("span");newCell.appendChild(newSpan);newSpan.appendChild(newText);newRow.setAttribute("row-id",d.Borough+"__"+d.TrainingLocationID);newRow.setAttribute("parent-id",d.Borough);
 					newRow.id=d.Borough+"__"+d.TrainingLocationID;}  
 				if ( !boroughlocationcourseset.has(d.Borough+"__"+d.TrainingLocationID+"__"+d.CourseID)) { 
 								myID = d.Borough+"__"+d.TrainingLocationID+"__"+d.CourseID;
 								boroughlocationcourseset.add(myID);myParent = d.Borough+"__"+d.TrainingLocationID;firstlocationcourse=true; // ************************************
 								boroughlocationcourseset.add(d.Borough+"__"+d.TrainingLocationID+"__"+d.CourseID);	
-								let newRow =tableRef.insertRow(-1);let newCell = newRow.insertCell(0);	let newText = document.createTextNode(d.Course);let newSpan=document.createElement("span");
+								var newRow =tableRef.insertRow(-1);var newCell = newRow.insertCell(0);	var newText = document.createTextNode(d.Course);var newSpan=document.createElement("span");
 								newCell.appendChild(newSpan);newSpan.appendChild(newText);newRow.setAttribute("row-id",d.Borough+"__"+d.TrainingLocationID+"__"+d.CourseID);newRow.setAttribute("parent-id",d.Borough+"__"+d.TrainingLocationID);
 								newRow.id=d.Borough+"__"+d.TrainingLocationID+"__"+d.CourseID;} 
 				if ( !boroughlocationcoursedatetimestartentryset.has(q )){  
 							myID=q;	boroughlocationcoursedatetimestartentryset.add(q); 
 							myParent = d.Borough+"__"+d.TrainingLocationID+"__"+d.CourseID;
-							let rowDateTimeInsructor=d["Start Date"]+" " + d["Start Time"] + ((d["End Time"] ) ? " - "+d["End Time"]:" ")+  //end time is sometimes missing
-							" (" + ((d.Instructor)? d.Instructor:"(tbd)") + ")";let newRow =tableRef.insertRow(-1);let newCell = newRow.insertCell(0);
-							let newSpan1 = document.createElement("span");let newText1 = document.createTextNode("Date/Time:");
-							newSpan1.appendChild(newText1);newSpan1.classList.add("detailHead");let newSpan2 = document.createElement("span");							
-							let newText2 = document.createTextNode(d["Start Date"]+" " +d["Start Time"] +((d["End Time"] ) ? " - "+d["End Time"]:" ") + " (" +((d.Instructor)? d.Instructor:"(tbd)") +") "); 
+							var rowDateTimeInsructor=d["Start Date"]+" " + d["Start Time"] + ((d["End Time"] ) ? " - "+d["End Time"]:" ")+  //end time is sometimes missing
+							" (" + ((d.Instructor)? d.Instructor:"(tbd)") + ")";var newRow =tableRef.insertRow(-1);var newCell = newRow.insertCell(0);
+							var newSpan1 = document.createElement("span");var newText1 = document.createTextNode("Date/Time:");
+							newSpan1.appendChild(newText1);newSpan1.classList.add("detailHead");var newSpan2 = document.createElement("span");							
+							var newText2 = document.createTextNode(d["Start Date"]+" " +d["Start Time"] +((d["End Time"] ) ? " - "+d["End Time"]:" ") + " (" +((d.Instructor)? d.Instructor:"(tbd)") +") "); 
 							newSpan2.appendChild(newText2);	newCell.appendChild(newSpan1);newCell.appendChild(newSpan2);							
 							newRow.setAttribute("row-id",q);newRow.setAttribute("parent-id",d.Borough+"__"+d.TrainingLocationID+"__"+d.CourseID);newRow.id=q;firstlocationcourse=false;
 							if  ( indexNum == array.length-1 || (q.substr(0,9) !=  array[indexNum+1].substr(0,9))  ) {
-								let newRow =tableRef.insertRow(-1);let newCell = newRow.insertCell(0);let newSpan1 = document.createElement("span");
-								let newText1 = document.createTextNode("Provider:");newSpan1.appendChild(newText1);newSpan1.classList.add("detailHead");
-								let newSpan2 = document.createElement("span");let newText2 = document.createTextNode(d["Course Provider"]);
+								var newRow =tableRef.insertRow(-1);var newCell = newRow.insertCell(0);var newSpan1 = document.createElement("span");
+								var newText1 = document.createTextNode("Provider:");newSpan1.appendChild(newText1);newSpan1.classList.add("detailHead");
+								var newSpan2 = document.createElement("span");var newText2 = document.createTextNode(d["Course Provider"]);
 								newSpan2.appendChild(newText2);newCell.appendChild(newSpan1);newCell.appendChild(newSpan2);newRow.setAttribute("row-id",q+"__provider");
 								newRow.setAttribute("parent-id",d.Borough+"__"+d.TrainingLocationID+"__"+d.CourseID);
 								newRow.className="providerInfo";newRow.id=q+"__provider";
 								newRow =tableRef.insertRow(-1);newCell = newRow.insertCell(0);
 								newSpan1 = document.createElement("span");newText1 = document.createTextNode("Web:");
 								newSpan1.appendChild(newText1);	newSpan1.classList.add("detailHead");newSpan2 = document.createElement("span");
-								let newA = document.createElement("a");newText2 = document.createTextNode(d["CourseProviderWebsite"]);
+								var newA = document.createElement("a");newText2 = document.createTextNode(d["CourseProviderWebsite"]);
 								newA.target="_blank";newA.href=d["CourseProviderWebsite"];newA.appendChild(newText2);newSpan2.appendChild(newA);
 								newCell.appendChild(newSpan1);newCell.appendChild(newSpan2);newRow.setAttribute("row-id",q+"__website");
 								newRow.setAttribute("parent-id",d.Borough+"__"+d.TrainingLocationID+"__"+d.CourseID);
