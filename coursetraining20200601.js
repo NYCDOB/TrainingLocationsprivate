@@ -3,7 +3,9 @@
 	function convertDate(theDate) {
 		return 	(theDate.split('/')[0] < 10 ? '0'+theDate.split('/')[0] : theDate.split('/')[0]) + (theDate.split('/')[1] < 10 ? '0'+theDate.split('/')[1] : theDate.split('/')[1]) + theDate.split('/')[2] ;	}
 	function convertTime(theTime) {
-		 return (theTime == "" ? "0000":theTime.split(' ')[1][0]=="P" && theTime.split(' ')[0].split(':')[0]!=12 ? ""+(parseInt(theTime.split(' ')[0].split(':')[0])+12) + "" + theTime.split(' ')[0].split(':')[1] : ""+theTime.split(' ')[0].split(':')[0] < 10 ? '0'+ theTime.split(' ')[0].split(':')[0] + theTime.split(' ')[0].split(':')[1] : theTime.split(' ')[0].split(':')[0]+""+theTime.split(' ')[0].split(':')[1]  )}
+		 return (theTime == "" ? "0000":theTime.split(' ')[1][0]=="P" && theTime.split(' ')[0].split(':')[0]!=12) ? "" +
+		 (parseInt(theTime.split(' ')[0].split(':')[0])+12) + "" + theTime.split(' ')[0].split(':')[1] : ""+ theTime.split(' ')[0].split(':')[0] < 10 ? '0' +
+		 theTime.split(' ')[0].split(':')[0] + theTime.split(' ')[0].split(':')[1] : theTime.split(' ')[0].split(':')[0] + "" + theTime.split(' ')[0].split(':')[1]}
 	function manualExpand( theLocation,vZoomedFromSearch=true) { 
 		var locationParent=document.querySelector("[id*="+theLocation +"]").getAttribute("parent-id");
 		document.querySelector("tr[row-id='"+locationParent+"']" ).classList.replace("tbltree-collapsed","tbltree-expanded");
