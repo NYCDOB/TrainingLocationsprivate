@@ -1,558 +1,616 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <title>NYCDOB Safety Training Sites</title>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="icon" type="image/png"  href="images/logo.png">
-    <link href='https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.css' rel='stylesheet' type='text/css'/>
-	<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/opencagedata/leaflet-opencage-search@d4cbd36122efc8d17152b4177ed0e12165305441/dist/css/L.Control.OpenCageData.Search.min.css" />	
-	<link rel="stylesheet" type='text/css' href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-	<link type="text/css" href="gagiks-jquery-tbltree-bec285e/css/jquery.tbltree.css" rel="stylesheet">
-	<link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-<style>
-.fa-search {
-font-weight: boldest;
+(function() {
+this.Element && function(ElementPrototype) {
+    ElementPrototype.matches = ElementPrototype.matches ||
+    ElementPrototype.matchesSelector ||
+    ElementPrototype.webkitMatchesSelector ||
+    ElementPrototype.msMatchesSelector ||
+    function(selector) {
+        var node = this, nodes = (node.parentNode || node.document).querySelectorAll(selector), i = -1;
+        while (nodes[++i] && nodes[i] != node);
+        return !!nodes[i];
+    }
+}(Element.prototype);
 
-}
-.fa-times-circle {
-color: red;
-}
-#ood {
- position:absolute;
- display:none;
- top:0%;
- left:0%; 
- height:100%;
- width: 100%;
- z-index:999;
- background-color:grey;
- opacity:.4;
-}
-#ood span{
-display:block;
-position:relative;
-top:40%;
-font-size:4rem;
-color:yellow;
-opacity:1;
-font-weight:900;
-text-align: center;
-}
-
-.clearBtn, .fltr_btn {
-float: right;
-}
-
-.resetall:hover{
-color:white;
-font-weight:900;
-cursor:pointer;}
+// closest polyfill
+this.Element && function(ElementPrototype) {
+    ElementPrototype.closest = ElementPrototype.closest ||
+    function(selector) {
+        var el = this;
+        while (el.matches && !el.matches(selector)) el = el.parentNode;
+        return el.matches ? el : null;
+    }
+}(Element.prototype);
 
 
-.fltr_btn:hover {
-text-shadow:1px 1px 3px black;
-}
 
-.glyphicon-info-sign	{
-font-size: 14px;
-color: grey;
-top:-3px;
-left:-3px;
-position: relative;
-}	
-body {
-height: 100%;
-}
-.navbar-brand {
-font-size: 3rem;
-font-weight: bold;
-color: white;		
-}
-.logo {
-background-image: url('images/dob_logo3.png');
-background-repeat: no-repeat;
-background-position: center;
-float: right;
-height: 60px;
-width: 100px;	 
-background-size: contain;
-}
-.footlinks a:hover {
-color: red;
-font-weight: bold;
-text-decoration: none;
-}
-#map {
-height: 100%; 
-width: 100%;
-background-color: #333;
-pointer-events: all;
-}
+	function convertDate(theDate) {
+		return (((theDate.split('/')[0] < 10) ? '0'+theDate.split('/')[0] : theDate.split('/')[0] )+((theDate.split('/')[1] < 10 )? '0'+theDate.split('/')[1] : theDate.split('/')[1])+ theDate.split('/')[2] );}
 
-div.tooltip {
-font-size: 1em;
-color: black  ; /*#222;*/
-background: #F8F8F8;  /*   #fff;   */
-padding: 1em;
-border: 2px solid #2A293E;
-
-border-radius: 2px; 
-
-opacity: 1 ;  /*0.9;  */
-position: absolute;
-visibility: hidden;
-font-family: 'Roboto', sans-serif;
-}
-div.tooltip span:first-child {
-font-weight: bolder;
-font-size: 1.2em;
-text-decoration: underline;
-}
-.point:not(.clickedPoint){
-fill: #e87800;   /*  orange-ish  */
-fill-opacity: .7;
-}
-
-
-.point.clickedPoint {
-fill: #0000ff;  /*  blue-ish  */
-fill-opacity: 1;
-}			
-
-
-.clickAddress {
-fill: #0000ff;  /*  blue-ish  */
-fill-opacity: 1;
-}
-
-#tbl_heading {
-font-size: 20px;
-padding: 5px 20px;
-color: deepskyblue;
-font-weight: bolder;
-}
-#tbl_heading button {
-font-size: 12px;
-}
-
-#map-container{
-height: 79vh;
-width: 100%;
-border: 3px solid black;
-position: relative;
-display: block;
-}
-
-#map-container2{
-height: 79vh;	
-width: 100%;
-z-index:99999;
-opacity: .1;
-border: 3px solid black;
-position: relative;
-display: block;
-}
-
-
-.table-wrapper {
-border: 3px solid black;
-height: 79vh;
-width: 100%;
-}
-.courseHeading {
-background-color: #7a7a7a;
-color: #ffffff;
-font-style: italic; 
-font-weight: bold;	
-}
-#filterTxt {
-font-size: 18px;
-font-weight: 800;
-color: #46A6DD;
-}
-
-
-tr[is-leaf='false'] td:last-child {
-cursor:pointer;
-}
-tr[level='0'] {
-font-weight: bolder;
-font-size:1.1em;
-}
-tr[level='2'] td :last-child {
-font-weight: normal ;
-}
-tr[level='1'] {
-color: #383838;
-font-weight: bold;
-}
-tr[level='3'] {
-font-size: .75em;
-}
-td:hover, tr:hover { 
-background-color: #F5F5F5;
-color: #e87800;
-}
-#loadpage {
-position:absolute;
-left:30%; 
-top:40%; 
-background-color:white;
-layer-background-color:white;
-width:auto;
-}
-.modal-header {
-background: #ececec;
-font-family: Oswald,sans-serif;
-color: #000;
-}
-.notFoundRowx  {
-font-size: 1.2em;
-padding-left:10px;
-padding: 5px 10px; 
-border: 2px solid red;
-border-radius:10px;
-background-color:#ffcccc;
-z-index: 1000;  /* ??  */
-}
-
-.notFoundRow span {
-font-weight: bold;
-margin-left: 15px;
-margin-right: 15px;
-}
-
-.searchCourse {
-font-size:1.3em;
-}
-
-
-.searchCourse label {
-font-weight: 900;
-color:#black;
-margin-bottom: 0px !important;
-}
-
-
-.searchCourse button {
-background: #46A6DD;
-color: white;
-font-size: 14px;
-zdisplay: inline-block;
-}
-
-
-#clr_btn {
-background: #46A6DD;
-color: white;
-font-size: 14px;
-display: inline-block;
-}
-
-.searchCourse button:hover ,
-#clr_btn:hover {
-background: #002878;
-}
-
-table {
-width: 100%;
-}
-tr {white-space:nowrap;}
-
-.detailHead {
-
-width: 15%;
-display: inline-block;
-position: relative;
-}		
-
-.removemarkerbutton {
-font-weight:bold
-}
-
-
-.removemarkerbutton:hover {
-color: red;
-}
-
-
-.zoomed {
-background-color: #e0e0e0;
-}
-
-
-.searchZoomed {
-background-color: #e0e0e0;
-}
-
-tr:not(.zoomed):not(.searchZoomed) {  
-background-color: transparent;
-}
-
-.textSearchResults {
-display: none;
-color: red;
-font-weight:bold;
-font-size: .75em;
-}
-.notMatched {
-display: none !important;
-}
-
-z*{border:1px solid red}
-
-@media (max-width: 991px) {
-		.feedback {
-		float: none !important;
+	function convertTime(theTime) {
+		 return (theTime == "" ? "0000":theTime.split(' ')[1][0]=="P" && theTime.split(' ')[0].split(':')[0]!=12)
+		 ? "" +
+		 (parseInt(theTime.split(' ')[0].split(':')[0])+12) + "" + theTime.split(' ')[0].split(':')[1] : ""+ theTime.split(' ')[0].split(':')[0] < 10 ? '0' +
+		 theTime.split(' ')[0].split(':')[0] + theTime.split(' ')[0].split(':')[1] : theTime.split(' ')[0].split(':')[0] + "" + theTime.split(' ')[0].split(':')[1]
 		}
-}
-
-@media (max-width: 600px) {
-		li {
-		text-align: center !important;
-		font-size: .65em;				
-		}
-		.fltr_btn, .clearBtn {
-		float:none !important;
-		}
-		div.tooltip {
-		display: none;					
-		}	
-}
-
 		
-</style>
-</head>
-<body>
-<div class="container-fluid">
-	<header>
-			  <nav class="navbar navbar-fixed-top" role="navigation" style="background-color:#e87800;border:solid 1px gray">
-				<ul class="nav navbar-brand" >
-						<li style="margin-top:5px">COURSE TRAINING LOCATIONS</li>
-				</ul>
-				<div class="navbar-collapse collapse ">
-							<a class="logo" href="https://www1.nyc.gov/site/buildings/safety/sst-safety.page" target="_blank"> </a>				
-				</div>
-			  </nav>		
-	</header>
-	<div class="row" style="margin:5px 0px;font-size:.75em;border: 1px solid #b8b8b8;border-radius:5px;background-color:#f8f8f8;
-	    padding: 10px 0px 5px;" > 
-				 <form class="searchCourse" id="zsearchCourse" style=""> 							
-								<div class="col-md-5">
-									<label for="">Course:</label>
-									<select id="dropdownCourses" style="max-width:100%" >											
-										<option value='allCourses' selected>All Courses</option>
-										<option class='courseHeading' value='' disabled>CONCRETE COURSES</option>
-										<option value='C01'>30-Hour Concrete Safety Manager</option>
-										<option value='C02'>8-Hour Concrete Safety Manager Refresher</option>
-										<option class='courseHeading' value='' disabled>CRANES & DERRICK COURSES</option>
-										<option value='C03'>16-Hour Rigger Supervisor Refresher</option>
-										<option value='C04'>16-Hour Rigging Worker</option>
-										<option value='C05'>30-Hour Climber/Tower Crane Rigger</option>
-										<option value='C06'>30-Hour Master Rigger</option>
-										<option value='C07'>30-Hour Special Rigger</option>
-										<option value='C08'>32-Hour Rigging Supervisor</option>
-										<option value='C09'>4-Hour Mast Climber User & Operator</option>
-										<option value='C10'>8-Hour Climber/Tower Crane Rigger Renewal</option>
-										<option value='C11'>8-Hour Hoisting Machine Operator Class B Rating</option>
-										<option value='C12'>8-Hour Master Rigger Renewal</option>
-										<option value='C13'>8-Hour Rigging Worker Refresher</option>
-										<option value='C14'>8-Hour Special Rigger Renewal</option>
-										<option class='courseHeading' value='' disabled>ELECTRICAL COURSES</option>
-										<option value='C15'>8-Hour Master & Special Electrician Renewal</option>
-										<option class='courseHeading' value='' disabled>GENERAL ELECTIVE COURSES</option>
-										<option value='C16'>1-Hour Electrocution Prevention</option>
-										<option value='C17'>1-Hour Fire Protection and Prevention</option>
-										<option value='C18'>1-Hour First Aid and CPR</option>
-										<option value='C19'>1-Hour Handing Heavy Materials and Proper Lifting Techniques</option>
-										<option value='C20'>1-Hour Hoisting and Rigging</option>
-										<option value='C21'>1-Hour Materials Handling, Storage, Use, and Disposal</option>
-										<option value='C22'>1-Hour Protection from Sun Exposure</option>
-										<option value='C23'>1-Hour Repetitive Motion Injuries</option>
-										<option value='C24'>1-Hour Stairways and Ladders</option>
-										<option value='C25'>1-Hour Tools-Hand and Power</option>
-										<option class='courseHeading' value='' disabled>PLUMBING COURSES</option>
-										<option value='C26'>16-Hour Limited Gas Work Qualification</option>
-										<option value='C27'>7-Hour Master Plumber & Master Suppression Piping Contractor Renewal</option>
-										<option value='C28'>7-Hour Periodic Gas Piping Inspector Qualification</option>
-										<option class='courseHeading' value='' disabled>PRESCRIBED COURSES</option>
-										<option value='C29'>2-Hour ‘Tool Box’ Talks</option>
-										<option value='C30'>2-Hour Drug and Alcohol Awareness</option>
-										<option value='C31'>2-Hour Pre-Task Meeting</option>
-										<option value='C32'>2-Hour Site Safety Plan (SSP)</option>
-										<option value='C33'>4-Hour Fall Prevention</option>
-										<option value='C34'>4-Hour Supported Scaffold User & Refresher</option>
-										<option value='C35'>8-Hour Fall Prevention</option>
-										<option value='C36'>8-Hour Site Safety Manager Refresher / Chapter 33</option>
-										<option class='courseHeading' value='' disabled>SAFETY COURSES</option>
-										<option value='C37'>40-Hour Site Safety Manager</option>
-										<option value='C38'>4-Hour Supported Scaffold User & Refresher</option>
-										<option value='C39'>8-Hour Site Safety Coordinator</option>
-										<option value='C40'>8-Hour Site Safety Manager Refresher / Chapter 33</option>
-										<option class='courseHeading' value='' disabled>SCAFFOLD COURSES</option>
-										<option value='C41'>16-Hour Suspended Scaffold User</option>
-										<option value='C42'>32-Hour Supported Scaffold Installer & Remover</option>
-										<option value='C43'>32-Hour Suspended Scaffold Supervisor</option>
-										<option value='C44'>4-Hour Supported Scaffold User & Refresher</option>
-										<option value='C45'>8-Hour Supported Scaffold Installer & Remover Refresher</option>
-										<option value='C46'>8-Hour Suspended Scaffold Supervisor Refresher</option>
-										<option value='C47'>8-Hour Suspended Scaffold User Refresher</option>
-										<option class='courseHeading' value='' disabled>SPECIALIZED ELECTIVE COURSES</option>
-										<option value='C48'>1-Hour Asbestos/Lead Awareness</option>
-										<option value='C49'>1-Hour Concrete and Masonry Construction</option>
-										<option value='C50'>1-Hour Confined Space Entry</option>
-										<option value='C51'>1-Hour Cranes, Derricks, Hoists, and Conveyors</option>
-										<option value='C52'>1-Hour Demolition Safety</option>
-										<option value='C53'>1-Hour Ergonomics</option>
-										<option value='C54'>1-Hour Excavations</option>
-										<option value='C55'>1-Hour Flag Person</option>
-										<option value='C56'>1-Hour Health and Safety Programs in Construction</option>
-										<option value='C57'>1-Hour Job Hazard Analysis</option>
-										<option value='C58'>1-Hour Motor Vehicles, Mechanized Equipment and Marine Operations</option>
-										<option value='C59'>1-Hour Personnel Lifts/Aerial Lifts/Scissor Lifts Safety</option>
-										<option value='C60'>1-Hour Risk Assessment and Accident Investigation</option>
-										<option value='C61'>1-Hour Scaffolds-Suspended</option>
-										<option value='C62'>1-Hour Steel Erection</option>
-										<option value='C63'>1-Hour Welding and Cutting</option>
-										<option value='C64'>2.5-Hour Foundations of Safety Leadership</option>
-										<option value='C65'>2-Hour Drug and Alcohol Awareness</option>
-										<option value='C66'>8-Hour Fall Prevention</option>
-									</select>									
-								</div>
+	function manualExpand( theLocation,vZoomedFromSearch) { 
+		var locationParent=document.querySelector("[id*="+theLocation +"]").getAttribute("parent-id");
+		var qqq=document.querySelector("tr[row-id='"+locationParent+"']" );
+		$(qqq).removeClass("tbltree-collapsed").addClass("tbltree-expanded");
+		document.querySelector("tr[row-id='"+locationParent+"']" ).setAttribute("tree-state","shown");
+		qqq=document.querySelector("tr[row-id='"+locationParent+"'] .tbltree-expander" )
+		$(qqq).removeClass("tbltree-expander-collapsed").addClass("tbltree-expander-expanded");
+		$('#locationTable').tbltree('expand', locationParent);
+		var thisLocation=document.querySelector("[id*="+theLocation +"]").getAttribute("row-id");
+		qqq=document.querySelector("tr[row-id='"+thisLocation+"']" );
+		$(qqq).removeClass("tbltree-collapsed").addClass("tbltree-expanded");
+		document.querySelector("tr[row-id='"+thisLocation+"']" ).setAttribute("tree-state","shown")	;
+		qqq=document.querySelector("tr[row-id='"+thisLocation+"'] .tbltree-expander" );
+		$(qqq).removeClass("tbltree-expander-collapsed").addClass("tbltree-expander-expanded");
+		$('#locationTable').tbltree('expand', thisLocation);
+		//document.querySelector("tr[row-id='"+thisLocation+"']" ).scrollIntoView(true,{behavior: "smooth", block: "start", inline: "nearest"});
+		( document.querySelector(".zoomed") ) ?  $(".zoomed").removeClass("zoomed") : 0;
+		qqq=document.querySelector("tr[row-id='"+thisLocation+"']" );
+		$(qqq).addClass("zoomed");
+	}		
+	function rowExpand (vTargetRowElement) {
+		vTargetRowElement.setAttribute("tree-state","shown");
+		$( vTargetRowElement ).removeClass( "tbltree-collapsed" ).addClass( "tbltree-expanded" );
+		$(vTargetRowElement[0]+".tbltree-expander" ).removeClass( "tbltree-expander-collapsed" ).addClass( "tbltree-expander-expanded" );
+		( vTargetRowElement.nextSibling.style.display="table-row" ) || 0; 
+		$('#locationTable').tbltree('expand', vTargetRowElement.getAttribute("row-id"));
+	}
+	function rowCollapse (vTargetRowElement) {
+		vTargetRowElement.setAttribute("tree-state","hidden");
+		$( vTargetRowElement ).removeClass( "tbltree-expanded" ).addClass( "tbltree-collapsed" );		
+		//vTargetRowElement.querySelector('.tbltree-expander').classList.replace("tbltree-expander-expanded","tbltree-expander-collapsed");
+		$( vTargetRowElement[0]+".tbltree-expander" ).removeClass( "tbltree-expander-expanded" ).addClass( "tbltree-expander-collapsed" );
+		( vTargetRowElement.nextSibling.style.display="none" ) || 0; 
+		$('#locationTable').tbltree('collapse', vTargetRowElement.getAttribute("row-id")); 
+	}
+	function collapseAll() {
+		var expandedRows = document.querySelectorAll(".tbltree-expanded") ;   
+		for (i=0; i<expandedRows.length; i++){  
+				var theRow = expandedRows[i].getAttribute("row-id"); 
+				$('#locationTable').tbltree('collapse', theRow);
+				$(expandedRows[i]).removeClass( "tbltree-expanded" ).addClass( "tbltree-collapsed" );
+				expandedRows[i].setAttribute("tree-state","hidden");
+				//expandedRows[i].getElementsByTagName("span")[1].classList.replace("tbltree-expander-expanded","tbltree-expander-collapsed"); }}
+				var qqq=expandedRows[i].getElementsByTagName("span")[1];
+				$(qqq).removeClass( "tbltree-expander-expanded" ).addClass( "tbltree-expander-collapsed" ); }
+	}
+	function manualCollapse(removeZoomed) {
+		(removeZoomed) ? removeZoomedClass() : null;
+		var expandedRows = document.querySelectorAll("tr[class='tbltree-expanded'][is-leaf='false']");  //get the tbl tree rows
+		for (i=0; i<expandedRows.length; i++){  
+			var theRow = expandedRows[i].getAttribute("row-id"); 
+			$('#locationTable').tbltree('collapse', theRow);
+			$(expandedRows[i]).removeClass("tbltree-expanded").addClass("tbltree-collapsed")	;
+			expandedRows[i].setAttribute("tree-state","hidden");
+			var qqq=expandedRows[i].getElementsByTagName("span")[1];
+			$(qqq).removeClass("tbltree-expander-expanded").addClass("tbltree-expander-collapsed");} 
+	}
+	function resetDropdowns() {
+		$("#dropdownCourses").val('allCourses');
+		$("#dropdownSST").val('sstAll');
+		$("#dropdownLanguages").val('all');
+		//document.querySelector("#onlinecheck").checked=false;//onlinecheck=false;
+		selectedCourse = "allCourses";
+		selectedSST = "sstAll";
+		selectedLanguage = "all";
+	}
+	function removeZoomedClass() {
+		var vZoomed=document.querySelector("tr[level='1'].zoomed");
+		var vSearchZoomed=document.querySelector("tr[level='1'].searchZoomed");
+		//if (vZoomed) { vZoomed.classList.remove("zoomed") }	;	
+		if (vZoomed) { $(vZoomed).removeClass("zoomed") }	;	
+		//(vSearchZoomed) ? vSearchZoomed.classList.remove("searchZoomed"):0;
+		(vSearchZoomed) ? $(vSearchZoomed).removeClass("searchZoomed"):0;
+		if (vZoomed || vSearchZoomed) {
+		   map.setView(defaultLatLng, 10); 
+		}
+	}
+	function zoomTo(latlong){
+			if (latlong[0]==0 && latlong[1]==0){return;}
+			map.setView(latlong,15);  //requested by John D.  Need to see other points around location
+			qqq=document.querySelectorAll('svg g circle[latlng="'+latlong[0]+ ','+latlong[1]+'"]');
+			for (var i=0;i<qqq.length;i++){
+				temp=qqq[i].className.baseVal;
+				$(temp).attr("class", temp + " clickedPoint");
+			}			
+	}			
+var defaultLatLng = [40.791384, -73.883770];
+var map = L.map('map').setView(defaultLatLng, 10);
+var options = {
+    key: '9277c3027dc546989ea28d048ffa9ee7', // your OpenCage API key
+    limit: 5,
+    position: 'topright',
+	proximity: '40.791384, -73.883770',	
+    placeholder: 'e.g. 280 Broadway NYC', // the text in the empty search box
+    errorMessage: 'Nothing found.',
+    showResultIcons: false,
+    collapsed: true,
+    expand: 'click',
+    addResultToMap: true   //, 
+}; 
+var control = L.Control.openCageSearch(options).addTo(map);
 
-								<div class="col-md-2">
-									<label for="">SST Status:</label>
-											<select id="dropdownSST" >
-												<option value="sstAll" selected>Any</option>
-												<option value="sstYes">Only SST</option>	
-												<option value="sstNo">Non-SST</option>
-											</select>
-								</div>
-								<div class="col-md-3">
-									<label for="">Language: </label>
-												<select id="dropdownLanguages" >
-														<option value="all">All</option>
-														<option value="Arabic">Arabic</option>
-														<option value="Bengali">Bengali</option>
-														<option value="Chinese (Cantonese/Mandarin)">Chinese (Cantonese/Mandarin)</option>
-														<option value="English">English</option>
-														<option value="Hatian Creole">Hatian Creole</option>
-														<option value="Georgian">Georgian</option>
-														<option value="Hindi">Hindi</option>
-														<option value="Italian">Italian</option>
-														<option value="Korean">Korean</option>
-														<option value="Polish">Polish</option>
-														<option value="Punjabi">Punjabi</option>
-														<option value="Russian">Russian</option>
-														<option value="Spanish">Spanish</option>
-														<option value="Urdu">Urdu</option>										
-												</select>
-								</div>
-<!--
-								<div class="col-md-1">
-										<label >Online? </label>
-										<input id="onlinecheck" type="checkbox" style="transform: scale(1.5);-webkit-transform: scale(1.5);"></input>	
-								</div>		
--->								
-								<div class="col-md-1" style="margin-top:-5px;">								
-									<div class="row">
-											<div class="col-md-5">
-												<i class="fa fa-search fltr_btn" id="submit_btn" title="Filter" style="color:blue;padding-left:0px;font-size:2em"></i>
-											</div>											
-											<div class="col-md-1 resetall">
-												<i class="fa fa-undo col-md-1 resetall" title="Reset All" style="color:blue;padding-left:0px;font-size:2em"></i>
-											</div>
-									</div>
-								</div>
-				</form>								
-	</div>
-	<div class="row notFoundRow" style="margin-bottom: 5px; padding-top:5px;padding-bottom:5px;display:none;top: 1px;z-index:999;" > 
-					<div class="col-md-12" > 
-					<div class="notFoundRowx" >  <!-- put a frame around search  -->  
-									<button type="button" title="Dismiss" class="close" aria-label="Close"><span class="glyphicon glyphicon-remove"></span></button>
-									<div class="row">
-											<div class="col-md-2">
-													<span style="padding-right:15px;"><strong>No Courses Found:</strong></span>
-											</div>
-											<div class="col-md-9">
-						Course: 	<span class="notFoundCourse"></span><span>|</span>
-						SST: 		<span class="notFoundSST"></span><span>|</span>
-						Language:	<span class="notFoundLanguage"></span>
-											</div>
-									</div>
-									
-					</div>  
-				</div>
-	</div>
-	<div class="row" >
-		<div class="col-md-8" >
-			<div class="" id="map-container" >
+control.markGeocode = function (result) {
+            L.Control.OpenCageSearch.instance = this;
+            if (result.bounds) {
+                this._map.fitBounds(result.bounds);
+            } else {
+                this._map.panTo(result.center);
+            }
+            if (this._geocodeMarker) {
+                this._map.removeLayer(this._geocodeMarker);
+            }			
+			var popupDiv=document.createElement("div");
+			var locationText = document.createElement("h5");
+			locationText.innerText = result.name;
+			var closeMarkerDiv = document.createElement("div")
+			closeMarkerDiv.style.textAlign = "center";
+			var closeMarkerDivButton = document.createElement("button");
+			closeMarkerDivButton.innerText="Remove";
+			closeMarkerDivButton.setAttribute("title","Remove marker from map");		
+			closeMarkerDivButton.setAttribute("type","button");
+			//closeMarkerDivButton.classList.add("btn","removemarkerbutton");
+			$(closeMarkerDivButton).addClass("btn","removemarkerbutton");
+			
+			closeMarkerDivButton.addEventListener("click",function(e){L.Control.OpenCageSearch.instance._map.removeLayer(L.Control.OpenCageSearch.instance._geocodeMarker)});
+			closeMarkerDiv.appendChild(closeMarkerDivButton);
+			popupDiv.appendChild(locationText);
+			popupDiv.appendChild(closeMarkerDiv);
+            this._geocodeMarker = new L.Marker(result.center)
+                .bindPopup(popupDiv)
+                .addTo(this._map)
+                .openPopup();
+            return this;
+        };
+
+function selectOpenCageSearchResult() {
+true;
+}
+
+function removeSearchMarkers () {
+	markerElements=["leaflet-shadow-pane","leaflet-marker-pane","leaflet-popup-pane"]
+	for(var i=0; i<markerElements.length; i++) {
+			var markerElement=document.querySelector("."+markerElements[i]+" :first-child");
+			(markerElement) ? markerElement.remove(): null;
+	}
+}
+
+	L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/toner-lite/{z}/{x}/{y}.png',    {attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'}).addTo(map);
+
+	var tooltip = d3.select('body').append('div')
+		.on('mouseover', function(d, i){
+			tooltip.transition().duration(0);
+		})
+		.on('mouseout', function(d, i){
+			tooltip.transition().delay(500).style('visibility', 'hidden');
+		})
+		.attr('class', 'tooltip');
+
+	var width = $("#map").width(),
+		height = $("#map").height(),
+		points = [],
+		//points = new Set(),
+		filteredData,	
+		latLngs = [],
+		selectedCourse="allCourses",
+		selectedSST="sstAll",
+		selectedLanguage="all",
+		//onlinecheck=false,
+		selectedRecord,
+		selectedCourse_cpID,
+		selectedSST_cpID;
+	var pointsOverlay = L.d3SvgOverlay(function(sel,proj){
+		var pointsUpd = sel.selectAll('circle').data(points);
+		pointsUpd.enter()
+			.append('circle')
+			.attr('cx',function(d){return proj.latLngToLayerPoint(d.latLng).x;})  
+			.attr('cy',function(d){return proj.latLngToLayerPoint(d.latLng).y;})
+			.attr('latlng',function(d){return   d.latLng} )
+			.attr('class', function(d){	return "point";	})
+			.on('click', function(d){
+					var vClickedPoints = document.querySelectorAll('.clickedPoint');					
+					for (var ctr=0,thelength=vClickedPoints.length; ctr < thelength;ctr++) {
+						//vClickedPoints[ctr].classList.remove("clickedPoint");
+						vClickedPoints[ctr].className.baseVal="point";						
+					}
+					//this.classList.add("clickedPoint")	
+					var qqq=this;
+					qqq.setAttribute("class",qqq.getAttribute("class")+" clickedPoint");
+					var vLocationCourses=document.querySelectorAll("tr[parent-id$='"+ d.locID    +"']");
+					var vToolTipCourses='';					
+					for (var i=0; i < vLocationCourses.length;i++) {
+						vToolTipCourses += "<br><span>&emsp;&bull; "+vLocationCourses[i].innerText+"</span>";
+					}
+					vToolTipCourses=
+					"<span>"+document.querySelector("tr[row-id*='"+ d.locID +"'][id*='provider'] .detailHead + span").innerText + "</span><br>" + 
+					"<span>"+d.full_Address + "</span><br>" + 
+					vToolTipCourses;
+					tooltip.html(
+						vToolTipCourses
+					)
+					//if (! L.Browser.touch && ! L.Browser.android) {
+					if (! L.Browser.android) {
+							tooltip.style("visibility", "visible");
+					}
+					
+					if (d3.event.pageX > (width - 200)) {
+					   tooltip.style("left", (d3.event.pageX - 350) + "px");
+					} else {
+					   tooltip.style("left", (d3.event.pageX + 20) + "px")
+							.style("top", (d3.event.pageY -30) + "px");
+					}
+					if (d3.event.pageY > (height - 150)) {
+					   tooltip.style("top", (d3.event.pageY -100) + "px");
+					} else {
+					   tooltip.style("top", (d3.event.pageY -30) + "px");
+					}
+					manualExpand(d.locID[0], false);  
+			})
+			.on("mouseover", function(d){				
+				//if (!this.classList.contains(".clickedPoint")  ) {
+				var temp=this.className.baseVal;
+				if (temp.indexOf(".clickedPoint") <0  ) {
+						$(this).attr("style", "cursor: pointer; fill: #eef442; fill-opacity: 1;");
+				}
+				tooltip.transition().duration(0); 
+			})
+			.on("mouseout", function(d){	
+				//if (!this.classList.contains(".clickedPoint")  ) {
+				var temp=this.className.baseVal;
+				if (temp.indexOf(".clickedPoint") <0 ) {
+						$(this).attr("style", "stroke-width: 0px; fill-opacity: .7;");
+				}	
+				return tooltip.transition().delay(500).style("visibility", "hidden"); 
+			});
+	;
+
+			pointsUpd.attr('r', 7 / proj.scale);  //POINT RADIUS
+	});  //end pointsOverlay definition
 							
-				<div id="map" style="position:relative">
-				  <div id="ood">
-				  <span ></span></div>
-				</div>
-			</div>			
-		</div>   
+//d3.csv("data/CourseTrainingLocations.csv", function(data) {
+d3.csv("data/CourseTrainingLocations20200601.csv", function(data) {
+	if (!data) {  //when there is a problem with the returned data
+			var element = document.createElement("h3");
+			element.appendChild(document.createTextNode("No Data Available"))
+			element.style.textAlign="center";
+			document.querySelector("#locationTable").appendChild(element);
+	} else {
 		
-		<div class="col-md-4" > 
-			<div class="table-wrapper" style="overflow-y:auto"  >
-					<div id="tbl_heading" style="border-bottom:1px solid #F0F0F0;text-align: center;">
-										<span>Locations and Courses
-										<a title="See Approved Courses" target="_blank " href="https://www1.nyc.gov/site/buildings/industry/dob-approved-courses.page"><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span></a>
-										</span>
-										<br>
-										<span class="textSearchResults"></span>
-				</div>
-				<div id="loadpage"> 
-					  <p align="center" style="font-size: large;">       
-						<b>Loading ... Please wait!</b><br/><br/><img src="images/spinner.gif">
-					  </p>
-				</div>	
-				<table id="locationTable" class="tree" style="visibility:hidden;">	
-				</table>
-			</div>				  
-		</div> 
-	</div>
-	<footer>
-	<div class="row" style="margin-top: 5px">
-		<div class="col-md-8">
-			Built by DOB Analytics <a target="_blank" href="https://www1.nyc.gov/site/buildings/about/metrics-reports.page">Dev Squad</a>
-		</div>
-		<div class="col-md-2 ">
-			Last Updated <span>06/01/2020</span>
-		</div>
-		<div class="col-md-2 ">
-			<div class="pull-right feedback"><a target="_blank" href="https://www.surveymonkey.com/r/W35368J">Feedback</a></div>
-		</div>		
-	</div>
-	</footer>
-	
-</div>  <!--  end main container fluid -->
-<!-- ****************************************************************************************************** -->
-<!-- 												JS RESOURCES											-->
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.js"></script>
-	<!-- address search -->
-    <script src="https://cdn.jsdelivr.net/gh/opencagedata/leaflet-opencage-search@1.3.0/dist/js/L.Control.OpenCageSearch.min.js"></script>		
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.4.9/d3.min.js"></script>		
-	<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
-	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
-	<script src="Leaflet.D3SvgOverlay-master/L.D3SvgOverlay.min.js"></script>	
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-	<script type="text/javascript" src="gagiks-jquery-tbltree-bec285e/js/jquery.tbltree.js"></script>
-	<script type="text/javascript" src="coursetraining20200601.js"></script>
+		var boros=["Bronx","Brooklyn", "Manhattan","Queens","Staten Island","Outside NYC","WEB",]
+		var justKeys = data.map( function(d){ 
+						var latlngArr=	 (  !isNaN(parseInt(d.Lat)) &&  !isNaN(parseInt(d.Long)) ) ?  [+d.Lat,+d.Long] : [+0,+0] ;
+						d.latLng =latlngArr   //[+d.Lat,+d.Long];;						
+						var newStartDate=convertDate(d["Start Date"]);
+						var newStartTime = convertTime(d["Start Time"]);
+						d.Borough = ( !d.Borough ) ? "Unknown" : d.Borough.trim();//account for empty boro
+						d.newBoro=( d.Borough) ? boros.indexOf(d.Borough)+1 : 99; //99=unknown boro
+						d.key=	d.newBoro + d.TrainingLocationID +d.CourseID  +	newStartDate + newStartTime +d.Instructor +	d.Entry;
+						latLngs.push(latlngArr);
+									obj={};
+									obj["latLng"] = latlngArr   //[+d.Lat,+d.Long];
+									obj["full_Address"] = d.Location;
+									obj["locID"] = [d.TrainingLocationID];
+									points.push(obj);
+						return d.key; 					
+		}) ;
+		pointsOverlay.addTo(map);
+		justKeys.sort();
+		var languages = ["Arabic","Bengali","Chinese (Cantonese/Mandarin)","English","Hatian Creole",
+			"Georgian","Hindi","Italian","Korean","Polish","Punjabi","Russian","Spanish","Urdu"];
+		buildTblTreeElements(data, justKeys, languages);  
+		$("#locationTable").tbltree(  
+						{initState: "collapsed"});
+		$("#locationTable").on("click", "tr[level='0']", function(event){ 
+					if ( event.target.className.indexOf("tbltree-expander") < 0  ) {
+						//  uses polyfill just in case						
+						var vTargetRow=document.querySelector("[row-id='"+   this.closest("tr").getAttribute("row-id") +  "']");
+						if ( vTargetRow.className.indexOf("tbltree-collapsed") >= 0 ) {
+								rowExpand(vTargetRow); 
+						} else {
+								rowCollapse(vTargetRow);
+						}
+						
+/*
+						var vTargetRow=$("[row-id='"+   this.closest("tr").getAttribute("row-id") +  "']");
+						if ( vTargetRow[0].classList.contains("tbltree-collapsed")  ) {
+								rowExpand(vTargetRow[0]); 
+						} else {
+								rowCollapse(vTargetRow[0]);
+						}
+*/
+					}			
+		})		
+		$("#locationTable").on("click", "tr", function(event){   //per John request, when select entire BORO line, expand it
+			if (this.className.indexOf("tbltree-expanded") >=0 && this.nextSibling ) {
+				//5/21/2020  
+				//$('body').scrollTop(0);
+				this.nextSibling.scrollIntoView();
+				true;
+			}
+		})		
+		$("#locationTable").on("click", "tr[level='1'] span:nth-child(3)", function(event){
+			vClickedPoints = document.querySelectorAll('.clickedPoint');
+			for (var ctr=0,thelength=vClickedPoints.length; ctr < thelength;ctr++) {
+				$(vClickedPoints[ctr]).removeClass("clickedPoint");
+			}
+			var vParentRow = event.target.closest("tr[level='1']");
+			if ( vParentRow.className.indexOf("zoomed") <0 ) { 
+				( document.querySelector(".zoomed") ) ?  $(".zoomed").removeClass("zoomed") : 0; 
+				$(vParentRow).addClass("zoomed") 
+				var vLocationID =  vParentRow.getAttribute("id")
+				var vTargetLatLng=null;
+				for ( var ctr=0;ctr<data.length;ctr++) { 
+						if (     data[ctr].TrainingLocationID== vLocationID.substring( vLocationID.indexOf('__')+2 )) {
+								vTargetLatLng=data[ctr].latLng;
+								break;
+				}}
+				zoomTo(vTargetLatLng);
+			} 
+		}) 
+			d3.select("#dropdownCourses").on('change', function(){
+				selectedCourse = d3.select(this).property('value');
+			});
+			d3.select("#dropdownSST").on('change', function(){
+				selectedSST = d3.select(this).property('value');
+			});
+			d3.select("#dropdownLanguages").on('change', function(){
+				selectedLanguage = d3.select(this).property('value');
+			});			
+			var filterClick = document.querySelector('.fltr_btn');
+			filterClick.onclick = function(){
+					event.preventDefault();
+					$(".notFoundRow").css("display","none") ;
+					document.querySelector(".textSearchResults").style.display="none";
+					//( document.querySelector(".zoomed") ) ?  document.querySelector(".zoomed").classList.remove("zoomed") : 0;
+					( document.querySelector(".zoomed") ) ?  $(".zoomed").removeClass("zoomed") : 0;					
+					selectedCourse = $( "#dropdownCourses option:selected" ).val();
+					selectedSST = $( "#dropdownSST option:selected" ).val();
+					selectedLanguage = $( "#dropdownLanguages option:selected" ).val();
+					filterQry(selectedCourse, selectedSST, selectedLanguage);
+			};
 
-<script>
-{
-$('body').scrollTop(0);
-window.scrollTo(0,0)
-	let bodyPadding = $(".navbar-fixed-top").height()+0;
-	//document.body.style.paddingTop=bodyPadding+"px";
-	document.body.style.marginTop=bodyPadding+"px";
-}
-</script>	
-</body>
-</html>
+			$('.resetall').click( function(e){   //reset everything!
+					e.preventDefault();
+					document.querySelector("#ood").style.display="none";
+					resetDropdowns();
+					map.removeLayer(pointsOverlay);		
+					removeSearchMarkers();
+					resetMapArrays(	data) ;
+					document.querySelector(".textSearchResults").style.display="none";
+					var qqq=document.querySelectorAll(".notMatched");for(i=0;i<qqq.length;i++) {$(qqq[i]).removeClass("notMatched")}
+					qqq=document.querySelectorAll(".clickedPoint");for(i=0;i<qqq.length;i++) {$(qqq[i]).removeClass("clickedPoint")}
+					qqq=document.querySelectorAll(".zoomed");for(i=0;i<qqq.length;i++) {$(qqq[i]).removeClass("zoomed")}
+					pointsOverlay.addTo(map);
+					map.setView(defaultLatLng, 10);
+					$(this).attr("title","Reset All");					
+					//manualCollapse(removeZoomed=true)
+					manualCollapse(true)
+					$(".notFoundRow").css("display","none") ;
+					$(".searchZoomed").removeClass("searchZoomed");
+					$(".zoomed").removeClass("zoomed");
+					var zoomedLocation=document.querySelectorAll("tr[level='1'].zoomed");
+					( document.querySelector(".leaflet-popup-pane").firstChild != null   ) 
+					&& L.Control.OpenCageSearch.instance._map.removeLayer(L.Control.OpenCageSearch.instance._geocodeMarker);  });  //end clear map+table event
+			
+			function filterQry(selectedCourse, selectedSST, selectedLanguage){
+					var selectedCourse_cpID = data.filter(function(d, index, arrayName){
+									return (	(d.CourseID == selectedCourse^selectedCourse=="allCourses") &&
+												((selectedSST=="sstYes" && d.SST=="Y"?1:0) + (selectedSST=="sstNo" && d.SST=="N"?1:0)+(selectedSST=="sstAll" ? 1:0)==1)  &&
+												( selectedLanguage == "all" || d.Language==selectedLanguage)
+											)}); 
+				points=[];	
+				//document.querySelectorAll(".notMatched").forEach( function(item){item.classList.remove("notMatched")});				
+				var qqq=document.querySelectorAll(".notMatched");
+				for(i=0;i<qqq.length;i++){ 
+				   $(qqq[i]).removeClass("notMatched") 
+				}
+				
+							resetMapArrays(	selectedCourse_cpID) ;  
+							map.removeLayer(pointsOverlay); 
+							pointsOverlay.addTo(map);	
+							collapseAll(); 
+							var allCoursesFiltered = selectedCourse_cpID.length == data.length ?  true: false;
+							if ( allCoursesFiltered )  {
+								map.setView(defaultLatLng, 10);
+								$(".searchZoomed").removeClass("searchZoomed");	
+							}  else  {
+								if ( data.length != selectedCourse_cpID.length) { 
+											document.querySelector(".textSearchResults").textContent = selectedCourse_cpID.length+" Courses Found" ;
+											document.querySelector(".textSearchResults").style.display="block" //"inline" ;
+								}			
+								zoom(latLngs);
+								var vBoros=new Set();
+								var vLocations=new Set();
+								var vCourses=new Set();	
+								var fullkey=new Set();
+								selectedCourse_cpID.map ( function (item, index) {
+										vBoros.add(item.Borough); 
+										vLocations.add(item.TrainingLocationID);
+										vCourses.add(item.TrainingLocationID+'__'+item.CourseID);
+										var newStartDate=convertDate(item["Start Date"]);
+										var newStartTime = convertTime(item["Start Time"]);
+										var boros=["Bronx","Brooklyn", "Manhattan","Queens","Staten Island","Outside NYC",]	
+										newBoro=( item.Borough ) ? boros.indexOf(item.Borough)+1 : 99;  //99=unknown boro
+										fullkey.add(newBoro + item.TrainingLocationID +item.CourseID  +	newStartDate + newStartTime +item.Instructor +	item.Entry);
+								})
+								var vCoursesTable = document.querySelector("#locationTable");						
+								var theparent='', loc='zzz';
+								for (var i=0, totRows=vCoursesTable.rows.length; i < totRows; i++ ) {
+										theparent="";
+										if ( vCoursesTable.rows[i].getAttribute("level")=="0" &&  !vBoros.has(vCoursesTable.rows[i].getAttribute("id")) ) {
+											//vCoursesTable.rows[i].classList.add("notMatched") ;
+											$(vCoursesTable.rows[i]).addClass("notMatched") ;
+										}													
+										if (  vCoursesTable.rows[i].getAttribute("level")=="1" && !vLocations.has(vCoursesTable.rows[i].getAttribute("id").substring(vCoursesTable.rows[i].getAttribute("id").indexOf('__')+2))){											
+											//vCoursesTable.rows[i].classList.add("notMatched") ; 
+											$(vCoursesTable.rows[i]).addClass("notMatched") ; 
+										}
+										if (vCoursesTable.rows[i].getAttribute("level")=="2" ){
+													loc =vCoursesTable.rows[i].getAttribute("id").substring(vCoursesTable.rows[i].getAttribute("id").indexOf('__')+2);
+													if ( !vCourses.has(loc)  )	{
+														//vCoursesTable.rows[i].classList.add("notMatched"); 
+														$(vCoursesTable.rows[i]).addClass("notMatched"); 
+													}
+										}
+										if ( vCoursesTable.rows[i].getAttribute("level")=="3" ) {	
+											whereunderscore = vCoursesTable.rows[i].getAttribute("id").indexOf('__');
+											coursesection= ( whereunderscore == -1 ) ? 											
+															vCoursesTable.rows[i].getAttribute("id") : 
+															vCoursesTable.rows[i].getAttribute("id").substring(0, whereunderscore)
+
+											if (vCourses.has(vCoursesTable.rows[i].getAttribute("parent-id").substring( vCoursesTable.rows[i].getAttribute("parent-id").indexOf("__"))) >-1 
+												&&  vCoursesTable.rows[i].getAttribute("row-id").indexOf('__') >= 0 ) {
+														true; 
+												} else if (fullkey.has(coursesection)){
+														true; 
+												}  else {
+														//vCoursesTable.rows[i].classList.add("notMatched");
+														$(vCoursesTable.rows[i]).addClass("notMatched");
+											}													
+													
+//													if ( vCoursesTable.rows[i].getAttribute("parent-id").indexOf(loc) >=0  && vCoursesTable.rows[i].getAttribute("row_id").indexOf('__') >= 0 ) {
+//														true;
+//													} else {
+//														vCoursesTable.rows[i].classList.add("notMatched");
+//													}
+//														
+//													if (!fullkey.has(coursesection)                          ) {
+															//vCoursesTable.rows[i].classList.add("notMatched");
+//													}
+										}										
+									}
+								
+								}
+			}
+	}	
+	$("#loadpage").hide();
+	document.querySelector("#locationTable").style.visibility="visible";	
+	})  //end d3 csv data
+
+	function resetMapArrays(sourceArray) { 
+		latLngs = sourceArray.map(function(d){				
+						var obj={};
+						obj["latLng"] = [+d.Lat,+d.Long];
+						obj["full_Address"] = d.Location.toUpperCase();
+						obj["locID"] = [d.TrainingLocationID];
+						points.push( obj );
+						return [+d.Lat,+d.Long];
+		});
+	}
+
+	function zoom(latLngs){
+		if (latLngs === undefined || latLngs == 0){  //no courses match
+			var category = $("#dropdownCourses option:selected").prevAll(".courseHeading").html();
+			$(".notFoundCourse").empty().append($("#dropdownCourses option:selected").text());
+				(document.querySelector("#dropdownCourses").selectedIndex > 0  ) ? $(".notFoundCourse").append( " in ",  $("#dropdownCourses option:selected").prevAll(".courseHeading").html()   ) :null;
+				$(".notFoundSST").empty().append($("#dropdownSST option:selected").text());
+				$(".notFoundLanguage").empty().append($("#dropdownLanguages option:selected").text());
+				$('.notFoundRow').show();
+				document.querySelector("#ood").style.display="none";
+				map.setView(defaultLatLng, 10);
+			}
+		else {  // matching courses
+			$(".notFoundRow").css("display","none") ;				
+			polyline = L.polyline(latLngs,{opacity:0}).addTo(map);
+			map.fitBounds(polyline.getBounds().pad(0.3));				
+			map.removeLayer(polyline);
+		}}  //end of zoom()
+	$(".notFoundRow button").click( function() {
+		$(".notFoundRow").css("display","none"); })
+	map.on('resize', function(){ 
+		map.invalidateSize();	});  //end of map resize event	
+	function buildTblTreeElements(data, keyArray, languages) {			
+			var doTitleCase = function (theString) {  
+				theString = theString.replace(/\W\S/g, function(t) 
+							{return t.toUpperCase() }); 
+				return theString.replace("\&","and" )};
+			var tableRef = document.querySelector("#locationTable")
+			var boroughsset = new Set();
+			var boroughlocationset = new Set();
+			var boroughlocationcourseset = new Set();
+			var boroughlocationcoursedatetimestartentryset = new Set();
+			var firstlocationcourse=true;
+			var providerInfo='';
+			var vglobe=document.createElement("i");
+			//vglobe.classList.add("fa","fa-globe");
+			$(vglobe).addClass("fa","fa-globe");
+			vglobe.setAttribute("title","Online");
+			vglobe.style.fontSize="1.2em"
+			vglobe.style.color="blue"
+			var alldata2 = keyArray.map(function(q, indexNum, array) {  //q=current element in array of keys
+				var indexNumber=null;				
+				for (var ctr = 0, sizer=data.length; ctr<sizer; ctr++) {
+					if ( data[ctr].key == q    ) {
+						indexNumber = ctr;
+						break;}}
+				var d = data[indexNumber];	
+				var trimBorough = d.Borough.trim();
+				var trimLocationID=d.TrainingLocationID.trim();
+				var trimCourseID=d.CourseID.trim();
+				if ( !boroughsset.has(d.Borough) ) {  
+						boroughsset.add(d.Borough);
+						var newRow =tableRef.insertRow(-1);var newCell = newRow.insertCell(0);var newB = document.createElement('b');var newText = document.createTextNode(d.Borough);
+						newCell.appendChild(newB);newB.appendChild(newText);newRow.setAttribute("row-id",d.Borough);newRow.id=d.Borough;} 
+				if ( !boroughlocationset.has(d.Borough+"__"+d.TrainingLocationID)    ) { 
+					boroughlocationset.add(d.Borough+"__"+d.TrainingLocationID);	
+					var newRow =tableRef.insertRow(-1);	var newCell = newRow.insertCell(0);var newText = document.createTextNode(d.Street +( (d.newBoro == 6 ) ? " ("+d.City+ ", " + d.State +")": "" ));
+					var newSpan=document.createElement("span");newCell.appendChild(newSpan);newSpan.appendChild(newText);newRow.setAttribute("row-id",d.Borough+"__"+d.TrainingLocationID);newRow.setAttribute("parent-id",d.Borough);
+					newRow.id=d.Borough+"__"+d.TrainingLocationID;}  
+				if ( !boroughlocationcourseset.has(d.Borough+"__"+d.TrainingLocationID+"__"+d.CourseID)) { 
+								myID = d.Borough+"__"+d.TrainingLocationID+"__"+d.CourseID;
+								boroughlocationcourseset.add(myID);myParent = d.Borough+"__"+d.TrainingLocationID;firstlocationcourse=true; // ************************************
+								boroughlocationcourseset.add(d.Borough+"__"+d.TrainingLocationID+"__"+d.CourseID);	
+								var newRow =tableRef.insertRow(-1);var newCell = newRow.insertCell(0);	var newText = document.createTextNode(d.Course);var newSpan=document.createElement("span");
+								newCell.appendChild(newSpan);newSpan.appendChild(newText);newRow.setAttribute("row-id",d.Borough+"__"+d.TrainingLocationID+"__"+d.CourseID);newRow.setAttribute("parent-id",d.Borough+"__"+d.TrainingLocationID);
+								newRow.id=d.Borough+"__"+d.TrainingLocationID+"__"+d.CourseID;} 
+				if ( !boroughlocationcoursedatetimestartentryset.has(q )){  
+							myID=q;	boroughlocationcoursedatetimestartentryset.add(q); 
+							myParent = d.Borough+"__"+d.TrainingLocationID+"__"+d.CourseID;
+							var rowDateTimeInsructor=d["Start Date"]+" " + d["Start Time"] + ((d["End Time"] ) ? " - "+d["End Time"]:" ")+  //end time is sometimes missing
+							" (" + ((d.Instructor)? d.Instructor:"(tbd)") + ")";var newRow =tableRef.insertRow(-1);var newCell = newRow.insertCell(0);
+							var newSpan1 = document.createElement("span");var newText1 = document.createTextNode("Date/Time:");
+							//newSpan1.appendChild(newText1);newSpan1.classList.add("detailHead");var newSpan2 = document.createElement("span");							
+							newSpan1.appendChild(newText1);$(newSpan1).addClass("detailHead");var newSpan2 = document.createElement("span");
+							var newText2 = document.createTextNode(d["Start Date"]+" " +d["Start Time"] +((d["End Time"] ) ? " - "+d["End Time"]:" ") + " (" +((d.Instructor)? d.Instructor:"(tbd)") +") "); 
+							newSpan2.appendChild(newText2);	newCell.appendChild(newSpan1);newCell.appendChild(newSpan2);							
+							newRow.setAttribute("row-id",q);newRow.setAttribute("parent-id",d.Borough+"__"+d.TrainingLocationID+"__"+d.CourseID);newRow.id=q;firstlocationcourse=false;
+							if  ( indexNum == array.length-1 || (q.substr(0,9) !=  array[indexNum+1].substr(0,9))  ) {
+								var newRow =tableRef.insertRow(-1);var newCell = newRow.insertCell(0);var newSpan1 = document.createElement("span");
+							  //var newText1 = document.createTextNode("Provider:");newSpan1.appendChild(newText1);newSpan1.classList.add("detailHead");
+								var newText1 = document.createTextNode("Provider:");newSpan1.appendChild(newText1);$(newSpan1).addClass("detailHead");
+								var newSpan2 = document.createElement("span");var newText2 = document.createTextNode(d["Course Provider"]);
+								newSpan2.appendChild(newText2);newCell.appendChild(newSpan1);newCell.appendChild(newSpan2);newRow.setAttribute("row-id",q+"__provider");
+								newRow.setAttribute("parent-id",d.Borough+"__"+d.TrainingLocationID+"__"+d.CourseID);
+								newRow.className="providerInfo";newRow.id=q+"__provider";
+								newRow =tableRef.insertRow(-1);newCell = newRow.insertCell(0);
+								newSpan1 = document.createElement("span");newText1 = document.createTextNode("Web:");
+								//newSpan1.appendChild(newText1);	newSpan1.classList.add("detailHead");newSpan2 = document.createElement("span");
+								newSpan1.appendChild(newText1);	$(newSpan1).addClass("detailHead");newSpan2 = document.createElement("span");
+								var newA = document.createElement("a");newText2 = document.createTextNode(d["CourseProviderWebsite"]);
+								newA.target="_blank";newA.href=d["CourseProviderWebsite"];newA.appendChild(newText2);newSpan2.appendChild(newA);
+								newCell.appendChild(newSpan1);newCell.appendChild(newSpan2);newRow.setAttribute("row-id",q+"__website");
+								newRow.setAttribute("parent-id",d.Borough+"__"+d.TrainingLocationID+"__"+d.CourseID);
+								newRow.className="providerInfo";newRow.id=q+"__website";newRow =tableRef.insertRow(-1);newCell = newRow.insertCell(0);
+								newSpan1 = document.createElement("span");newText1 = document.createTextNode("Phone:");newSpan1.appendChild(newText1);
+								//newSpan1.classList.add("detailHead");newSpan2 = document.createElement("span");newText2 = document.createTextNode(d["CourseProviderPhone"]);
+								$(newSpan1).addClass("detailHead");newSpan2 = document.createElement("span");newText2 = document.createTextNode(d["CourseProviderPhone"]);
+								newSpan2.appendChild(newText2);newCell.appendChild(newSpan1);newCell.appendChild(newSpan2);								
+								newRow.setAttribute("row-id",q+"__phone");newRow.setAttribute("parent-id",d.Borough+"__"+d.TrainingLocationID+"__"+d.CourseID);
+								newRow.className="providerInfo";newRow.id=q+"__phone";newRow =tableRef.insertRow(-1);newCell = newRow.insertCell(0);
+								newSpan1 = document.createElement("span");newText1 = document.createTextNode("Price:");newSpan1.appendChild(newText1);
+								//newSpan1.classList.add("detailHead");newSpan2 = document.createElement("span");newText2 = document.createTextNode(d["Price"]);
+								$(newSpan1).addClass("detailHead");newSpan2 = document.createElement("span");newText2 = document.createTextNode(d["Price"]);
+								newSpan2.appendChild(newText2);newCell.appendChild(newSpan1);newCell.appendChild(newSpan2);newRow.setAttribute("row-id",q+"__price");
+								newRow.setAttribute("parent-id",d.Borough+"__"+d.TrainingLocationID+"__"+d.CourseID);
+								newRow.className="providerInfo";newRow.id=q+"__price";newRow =tableRef.insertRow(-1);newCell = newRow.insertCell(0);newSpan1 = document.createElement("span");
+								newCell.appendChild(newSpan1);newRow.setAttribute("row-id",q+"__separator");newRow.setAttribute("parent-id",d.Borough+"__"+d.TrainingLocationID+"__"+d.CourseID);newRow.id=q+"__separator";
+							}							
+				} 
+			})
+		} 
+})();
