@@ -114,9 +114,11 @@ this.Element && function(ElementPrototype) {
 			if (latlong[0]==0 && latlong[1]==0){return;}
 			map.setView(latlong,15);  //requested by John D.  Need to see other points around location
 			qqq=document.querySelectorAll('svg g circle[latlng="'+latlong[0]+ ','+latlong[1]+'"]');
-			qqq.forEach(function(el) {temp=el.className.baseVal;$(el).attr("class", temp + " clickedPoint");})
-	}
-			
+			for (var i=0;i<qqq.length;i++){
+				temp=qqq[i].className.baseVal;
+				$(temp).attr("class", temp + " clickedPoint");
+			}			
+	}			
 var defaultLatLng = [40.791384, -73.883770];
 var map = L.map('map').setView(defaultLatLng, 10);
 var options = {
@@ -380,13 +382,9 @@ d3.csv("data/CourseTrainingLocations20200601.csv", function(data) {
 					removeSearchMarkers();
 					resetMapArrays(	data) ;
 					document.querySelector(".textSearchResults").style.display="none";
-					//document.querySelectorAll(".notMatched").forEach( function(item){item.classList.remove("notMatched")});
-					//document.querySelectorAll(".clickedPoint").forEach( function(item){item.classList.remove("clickedPoint")});
-					//( document.querySelector(".zoomed") ) ?  document.querySelector(".zoomed").classList.remove("zoomed") : 0;
 					var qqq=document.querySelectorAll(".notMatched");for(i=0;i<qqq.length;i++) {$(qqq[i]).removeClass("notMatched")}
 					qqq=document.querySelectorAll(".clickedPoint");for(i=0;i<qqq.length;i++) {$(qqq[i]).removeClass("clickedPoint")}
 					qqq=document.querySelectorAll(".zoomed");for(i=0;i<qqq.length;i++) {$(qqq[i]).removeClass("zoomed")}
-
 					pointsOverlay.addTo(map);
 					map.setView(defaultLatLng, 10);
 					$(this).attr("title","Reset All");					
