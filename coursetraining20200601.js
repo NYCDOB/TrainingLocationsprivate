@@ -1,79 +1,121 @@
-// $(document).ready(function(){
+(function() {
+this.Element && function(ElementPrototype) {
+    ElementPrototype.matches = ElementPrototype.matches ||
+    ElementPrototype.matchesSelector ||
+    ElementPrototype.webkitMatchesSelector ||
+    ElementPrototype.msMatchesSelector ||
+    function(selector) {
+        var node = this, nodes = (node.parentNode || node.document).querySelectorAll(selector), i = -1;
+        while (nodes[++i] && nodes[i] != node);
+        return !!nodes[i];
+    }
+}(Element.prototype);
+
+// closest polyfill
+this.Element && function(ElementPrototype) {
+    ElementPrototype.closest = ElementPrototype.closest ||
+    function(selector) {
+        var el = this;
+        while (el.matches && !el.matches(selector)) el = el.parentNode;
+        return el.matches ? el : null;
+    }
+}(Element.prototype);
+
+
 
 	function convertDate(theDate) {
-		return 	(theDate.split('/')[0] < 10 ? '0'+theDate.split('/')[0] : theDate.split('/')[0]) + (theDate.split('/')[1] < 10 ? '0'+theDate.split('/')[1] : theDate.split('/')[1]) + theDate.split('/')[2] ;	}
+		return (((theDate.split('/')[0] < 10) ? '0'+theDate.split('/')[0] : theDate.split('/')[0] )+((theDate.split('/')[1] < 10 )? '0'+theDate.split('/')[1] : theDate.split('/')[1])+ theDate.split('/')[2] );}
+
 	function convertTime(theTime) {
-		 return (theTime == "" ? "0000":theTime.split(' ')[1][0]=="P" && theTime.split(' ')[0].split(':')[0]!=12) ? "" +
+		 return (theTime == "" ? "0000":theTime.split(' ')[1][0]=="P" && theTime.split(' ')[0].split(':')[0]!=12)
+		 ? "" +
 		 (parseInt(theTime.split(' ')[0].split(':')[0])+12) + "" + theTime.split(' ')[0].split(':')[1] : ""+ theTime.split(' ')[0].split(':')[0] < 10 ? '0' +
-		 theTime.split(' ')[0].split(':')[0] + theTime.split(' ')[0].split(':')[1] : theTime.split(' ')[0].split(':')[0] + "" + theTime.split(' ')[0].split(':')[1]}
+		 theTime.split(' ')[0].split(':')[0] + theTime.split(' ')[0].split(':')[1] : theTime.split(' ')[0].split(':')[0] + "" + theTime.split(' ')[0].split(':')[1]
+		}
+		
 	function manualExpand( theLocation,vZoomedFromSearch) { 
 		var locationParent=document.querySelector("[id*="+theLocation +"]").getAttribute("parent-id");
-		document.querySelector("tr[row-id='"+locationParent+"']" ).classList.replace("tbltree-collapsed","tbltree-expanded");
+		var qqq=document.querySelector("tr[row-id='"+locationParent+"']" );
+		$(qqq).removeClass("tbltree-collapsed").addClass("tbltree-expanded");
 		document.querySelector("tr[row-id='"+locationParent+"']" ).setAttribute("tree-state","shown");
-		document.querySelector("tr[row-id='"+locationParent+"'] .tbltree-expander" ).classList.replace("tbltree-expander-collapsed","tbltree-expander-expanded");
+		qqq=document.querySelector("tr[row-id='"+locationParent+"'] .tbltree-expander" )
+		$(qqq).removeClass("tbltree-expander-collapsed").addClass("tbltree-expander-expanded");
 		$('#locationTable').tbltree('expand', locationParent);
 		var thisLocation=document.querySelector("[id*="+theLocation +"]").getAttribute("row-id");
-		document.querySelector("tr[row-id='"+thisLocation+"']" ).classList.replace("tbltree-collapsed","tbltree-expanded");
+		qqq=document.querySelector("tr[row-id='"+thisLocation+"']" );
+		$(qqq).removeClass("tbltree-collapsed").addClass("tbltree-expanded");
 		document.querySelector("tr[row-id='"+thisLocation+"']" ).setAttribute("tree-state","shown")	;
-		document.querySelector("tr[row-id='"+thisLocation+"'] .tbltree-expander" ).classList.replace("tbltree-expander-collapsed","tbltree-expander-expanded");
+		qqq=document.querySelector("tr[row-id='"+thisLocation+"'] .tbltree-expander" );
+		$(qqq).removeClass("tbltree-expander-collapsed").addClass("tbltree-expander-expanded");
 		$('#locationTable').tbltree('expand', thisLocation);
 		//document.querySelector("tr[row-id='"+thisLocation+"']" ).scrollIntoView(true,{behavior: "smooth", block: "start", inline: "nearest"});
-		( document.querySelector(".zoomed") ) ?  document.querySelector(".zoomed").classList.remove("zoomed") : 0;
-		document.querySelector("tr[row-id='"+thisLocation+"']" ).classList.add("zoomed"); } 
+		( document.querySelector(".zoomed") ) ?  $(".zoomed").removeClass("zoomed") : 0;
+		qqq=document.querySelector("tr[row-id='"+thisLocation+"']" );
+		$(qqq).addClass("zoomed");
+	}		
 	function rowExpand (vTargetRowElement) {
 		vTargetRowElement.setAttribute("tree-state","shown");
-		vTargetRowElement.classList.replace("tbltree-collapsed","tbltree-expanded");
-		vTargetRowElement.querySelector('.tbltree-expander').classList.replace("tbltree-expander-collapsed","tbltree-expander-expanded");
+		$( vTargetRowElement ).removeClass( "tbltree-collapsed" ).addClass( "tbltree-expanded" );
+		$(vTargetRowElement[0]+".tbltree-expander" ).removeClass( "tbltree-expander-collapsed" ).addClass( "tbltree-expander-expanded" );
 		( vTargetRowElement.nextSibling.style.display="table-row" ) || 0; 
-		$('#locationTable').tbltree('expand', vTargetRowElement.getAttribute("row-id"));}
+		$('#locationTable').tbltree('expand', vTargetRowElement.getAttribute("row-id"));
+	}
 	function rowCollapse (vTargetRowElement) {
 		vTargetRowElement.setAttribute("tree-state","hidden");
-		vTargetRowElement.classList.replace("tbltree-expanded","tbltree-collapsed");
-		vTargetRowElement.querySelector('.tbltree-expander').classList.replace("tbltree-expander-expanded","tbltree-expander-collapsed");
+		$( vTargetRowElement ).removeClass( "tbltree-expanded" ).addClass( "tbltree-collapsed" );		
+		//vTargetRowElement.querySelector('.tbltree-expander').classList.replace("tbltree-expander-expanded","tbltree-expander-collapsed");
+		$( vTargetRowElement[0]+".tbltree-expander" ).removeClass( "tbltree-expander-expanded" ).addClass( "tbltree-expander-collapsed" );
 		( vTargetRowElement.nextSibling.style.display="none" ) || 0; 
-		$('#locationTable').tbltree('collapse', vTargetRowElement.getAttribute("row-id")); }
+		$('#locationTable').tbltree('collapse', vTargetRowElement.getAttribute("row-id")); 
+	}
 	function collapseAll() {
 		var expandedRows = document.querySelectorAll(".tbltree-expanded") ;   
 		for (i=0; i<expandedRows.length; i++){  
 				var theRow = expandedRows[i].getAttribute("row-id"); 
 				$('#locationTable').tbltree('collapse', theRow);
-				expandedRows[i].classList.replace("tbltree-expanded","tbltree-collapsed");	
+				$(expandedRows[i]).removeClass( "tbltree-expanded" ).addClass( "tbltree-collapsed" );
 				expandedRows[i].setAttribute("tree-state","hidden");
-				expandedRows[i].getElementsByTagName("span")[1].classList.replace("tbltree-expander-expanded","tbltree-expander-collapsed"); }}
-	function manualCollapse(removeZoomed=true) {
+				//expandedRows[i].getElementsByTagName("span")[1].classList.replace("tbltree-expander-expanded","tbltree-expander-collapsed"); }}
+				var qqq=expandedRows[i].getElementsByTagName("span")[1];
+				$(qqq).removeClass( "tbltree-expander-expanded" ).addClass( "tbltree-expander-collapsed" ); }
+	}
+	function manualCollapse(removeZoomed) {
 		(removeZoomed) ? removeZoomedClass() : null;
 		var expandedRows = document.querySelectorAll("tr[class='tbltree-expanded'][is-leaf='false']");  //get the tbl tree rows
 		for (i=0; i<expandedRows.length; i++){  
-				var theRow = expandedRows[i].getAttribute("row-id"); 
-				$('#locationTable').tbltree('collapse', theRow);
-				expandedRows[i].classList.replace("tbltree-expanded","tbltree-collapsed")	;
-				expandedRows[i].setAttribute("tree-state","hidden");
-				expandedRows[i].getElementsByTagName("span")[1].classList.replace("tbltree-expander-expanded","tbltree-expander-collapsed"); } }
+			var theRow = expandedRows[i].getAttribute("row-id"); 
+			$('#locationTable').tbltree('collapse', theRow);
+			$(expandedRows[i]).removeClass("tbltree-expanded").addClass("tbltree-collapsed")	;
+			expandedRows[i].setAttribute("tree-state","hidden");
+			var qqq=expandedRows[i].getElementsByTagName("span")[1];
+			$(qqq).removeClass("tbltree-expander-expanded").addClass("tbltree-expander-collapsed");} 
+	}
 	function resetDropdowns() {
 		$("#dropdownCourses").val('allCourses');
 		$("#dropdownSST").val('sstAll');
 		$("#dropdownLanguages").val('all');
-		//document.querySelector("#onlinecheck").checked=false;
+		//document.querySelector("#onlinecheck").checked=false;//onlinecheck=false;
 		selectedCourse = "allCourses";
 		selectedSST = "sstAll";
 		selectedLanguage = "all";
-		//onlinecheck=false;
-		}
+	}
 	function removeZoomedClass() {
 		var vZoomed=document.querySelector("tr[level='1'].zoomed");
 		var vSearchZoomed=document.querySelector("tr[level='1'].searchZoomed");
-		if (vZoomed) { vZoomed.classList.remove("zoomed") }	;	
-		(vSearchZoomed) ? vSearchZoomed.classList.remove("searchZoomed") : 0;
+		//if (vZoomed) { vZoomed.classList.remove("zoomed") }	;	
+		if (vZoomed) { $(vZoomed).removeClass("zoomed") }	;	
+		//(vSearchZoomed) ? vSearchZoomed.classList.remove("searchZoomed"):0;
+		(vSearchZoomed) ? $(vSearchZoomed).removeClass("searchZoomed"):0;
 		if (vZoomed || vSearchZoomed) {
 		   map.setView(defaultLatLng, 10); 
-		 }}
+		}
+	}
 	function zoomTo(latlong){
-			if (latlong[0]==0 && latlong[1]==0){
-				return;
-			}
-			//map.setView(latlong,20);
+			if (latlong[0]==0 && latlong[1]==0){return;}
 			map.setView(latlong,15);  //requested by John D.  Need to see other points around location
-			document.querySelectorAll('svg g circle[latlng="'+latlong[0]+ ','+latlong[1]+'"]').forEach( (el) => { el.classList.add("clickedPoint")}  )}
+			qqq=document.querySelectorAll('svg g circle[latlng="'+latlong[0]+ ','+latlong[1]+'"]');
+			qqq.forEach(function(el) {temp=el.className.baseVal;$(el).attr("class", temp + " clickedPoint");})
+	}
 			
 var defaultLatLng = [40.791384, -73.883770];
 var map = L.map('map').setView(defaultLatLng, 10);
@@ -93,17 +135,14 @@ var control = L.Control.openCageSearch(options).addTo(map);
 
 control.markGeocode = function (result) {
             L.Control.OpenCageSearch.instance = this;
-
             if (result.bounds) {
                 this._map.fitBounds(result.bounds);
             } else {
                 this._map.panTo(result.center);
             }
-
             if (this._geocodeMarker) {
                 this._map.removeLayer(this._geocodeMarker);
-            }
-			
+            }			
 			var popupDiv=document.createElement("div");
 			var locationText = document.createElement("h5");
 			locationText.innerText = result.name;
@@ -113,8 +152,10 @@ control.markGeocode = function (result) {
 			closeMarkerDivButton.innerText="Remove";
 			closeMarkerDivButton.setAttribute("title","Remove marker from map");		
 			closeMarkerDivButton.setAttribute("type","button");
-			closeMarkerDivButton.classList.add("btn","removemarkerbutton");
-			closeMarkerDivButton.addEventListener("click", e => {L.Control.OpenCageSearch.instance._map.removeLayer(L.Control.OpenCageSearch.instance._geocodeMarker) });
+			//closeMarkerDivButton.classList.add("btn","removemarkerbutton");
+			$(closeMarkerDivButton).addClass("btn","removemarkerbutton");
+			
+			closeMarkerDivButton.addEventListener("click",function(e){L.Control.OpenCageSearch.instance._map.removeLayer(L.Control.OpenCageSearch.instance._geocodeMarker)});
 			closeMarkerDiv.appendChild(closeMarkerDivButton);
 			popupDiv.appendChild(locationText);
 			popupDiv.appendChild(closeMarkerDiv);
@@ -161,25 +202,23 @@ function removeSearchMarkers () {
 		selectedRecord,
 		selectedCourse_cpID,
 		selectedSST_cpID;
-		
-		
-
 	var pointsOverlay = L.d3SvgOverlay(function(sel,proj){
 		var pointsUpd = sel.selectAll('circle').data(points);
 		pointsUpd.enter()
 			.append('circle')
 			.attr('cx',function(d){return proj.latLngToLayerPoint(d.latLng).x;})  
 			.attr('cy',function(d){return proj.latLngToLayerPoint(d.latLng).y;})
-			.attr('latlng',  (d) => {return   d.latLng} )
+			.attr('latlng',function(d){return   d.latLng} )
 			.attr('class', function(d){	return "point";	})
 			.on('click', function(d){
-				
-					vClickedPoints = document.querySelectorAll('.clickedPoint');
+					var vClickedPoints = document.querySelectorAll('.clickedPoint');					
 					for (var ctr=0,thelength=vClickedPoints.length; ctr < thelength;ctr++) {
-						vClickedPoints[ctr].classList.remove("clickedPoint");
+						//vClickedPoints[ctr].classList.remove("clickedPoint");
+						vClickedPoints[ctr].className.baseVal="point";						
 					}
-																				
-					this.classList.add("clickedPoint")	
+					//this.classList.add("clickedPoint")	
+					var qqq=this;
+					qqq.setAttribute("class",qqq.getAttribute("class")+" clickedPoint");
 					var vLocationCourses=document.querySelectorAll("tr[parent-id$='"+ d.locID    +"']");
 					var vToolTipCourses='';					
 					for (var i=0; i < vLocationCourses.length;i++) {
@@ -192,13 +231,10 @@ function removeSearchMarkers () {
 					tooltip.html(
 						vToolTipCourses
 					)
-					
-					
-if (! L.Browser.touch && ! L.Browser.android) {
-
-		tooltip.style("visibility", "visible");
-
-}
+					//if (! L.Browser.touch && ! L.Browser.android) {
+					if (! L.Browser.android) {
+							tooltip.style("visibility", "visible");
+					}
 					
 					if (d3.event.pageX > (width - 200)) {
 					   tooltip.style("left", (d3.event.pageX - 350) + "px");
@@ -214,16 +250,20 @@ if (! L.Browser.touch && ! L.Browser.android) {
 					manualExpand(d.locID[0], false);  
 			})
 			.on("mouseover", function(d){				
-					if (!this.classList.contains(".clickedPoint")  ) {
-							$(this).attr("style", "cursor: pointer; fill: #eef442; fill-opacity: 1;");
-					}
-					tooltip.transition().duration(0); 
+				//if (!this.classList.contains(".clickedPoint")  ) {
+				var temp=this.className.baseVal;
+				if (temp.indexOf(".clickedPoint") <0  ) {
+						$(this).attr("style", "cursor: pointer; fill: #eef442; fill-opacity: 1;");
+				}
+				tooltip.transition().duration(0); 
 			})
 			.on("mouseout", function(d){	
-				if (!this.classList.contains(".clickedPoint")  ) {
-							$(this).attr("style", "stroke-width: 0px; fill-opacity: .7;");
-					}	
-					return tooltip.transition().delay(500).style("visibility", "hidden"); 
+				//if (!this.classList.contains(".clickedPoint")  ) {
+				var temp=this.className.baseVal;
+				if (temp.indexOf(".clickedPoint") <0 ) {
+						$(this).attr("style", "stroke-width: 0px; fill-opacity: .7;");
+				}	
+				return tooltip.transition().delay(500).style("visibility", "hidden"); 
 			});
 	;
 
@@ -240,7 +280,7 @@ d3.csv("data/CourseTrainingLocations20200601.csv", function(data) {
 	} else {
 		
 		var boros=["Bronx","Brooklyn", "Manhattan","Queens","Staten Island","Outside NYC","WEB",]
-		var justKeys = data.map( (d) => { 
+		var justKeys = data.map( function(d){ 
 						var latlngArr=	 (  !isNaN(parseInt(d.Lat)) &&  !isNaN(parseInt(d.Long)) ) ?  [+d.Lat,+d.Long] : [+0,+0] ;
 						d.latLng =latlngArr   //[+d.Lat,+d.Long];;						
 						var newStartDate=convertDate(d["Start Date"]);
@@ -264,17 +304,27 @@ d3.csv("data/CourseTrainingLocations20200601.csv", function(data) {
 		$("#locationTable").tbltree(  
 						{initState: "collapsed"});
 		$("#locationTable").on("click", "tr[level='0']", function(event){ 
-					if (!  event.target.classList.contains("tbltree-expander")  ) {
+					if ( event.target.className.indexOf("tbltree-expander") < 0  ) {
+						//  uses polyfill just in case						
 						var vTargetRow=document.querySelector("[row-id='"+   this.closest("tr").getAttribute("row-id") +  "']");
-						if ( vTargetRow.classList.contains("tbltree-collapsed")  ) {
+						if ( vTargetRow.className.indexOf("tbltree-collapsed") >= 0 ) {
 								rowExpand(vTargetRow); 
 						} else {
 								rowCollapse(vTargetRow);
-						}	
+						}
+						
+/*
+						var vTargetRow=$("[row-id='"+   this.closest("tr").getAttribute("row-id") +  "']");
+						if ( vTargetRow[0].classList.contains("tbltree-collapsed")  ) {
+								rowExpand(vTargetRow[0]); 
+						} else {
+								rowCollapse(vTargetRow[0]);
+						}
+*/
 					}			
 		})		
 		$("#locationTable").on("click", "tr", function(event){   //per John request, when select entire BORO line, expand it
-			if (this.classList.contains("tbltree-expanded") && this.nextSibling ) {
+			if (this.className.indexOf("tbltree-expanded") >=0 && this.nextSibling ) {
 				//5/21/2020  
 				//$('body').scrollTop(0);
 				this.nextSibling.scrollIntoView();
@@ -284,20 +334,19 @@ d3.csv("data/CourseTrainingLocations20200601.csv", function(data) {
 		$("#locationTable").on("click", "tr[level='1'] span:nth-child(3)", function(event){
 			vClickedPoints = document.querySelectorAll('.clickedPoint');
 			for (var ctr=0,thelength=vClickedPoints.length; ctr < thelength;ctr++) {
-				vClickedPoints[ctr].classList.remove("clickedPoint");
+				$(vClickedPoints[ctr]).removeClass("clickedPoint");
 			}
 			var vParentRow = event.target.closest("tr[level='1']");
-			if (! vParentRow.classList.contains("zoomed") ) { 
-				( document.querySelector(".zoomed") ) ?  document.querySelector(".zoomed").classList.remove("zoomed") : 0; 
-				vParentRow.classList.add("zoomed") 
+			if ( vParentRow.className.indexOf("zoomed") <0 ) { 
+				( document.querySelector(".zoomed") ) ?  $(".zoomed").removeClass("zoomed") : 0; 
+				$(vParentRow).addClass("zoomed") 
 				var vLocationID =  vParentRow.getAttribute("id")
 				var vTargetLatLng=null;
 				for ( var ctr=0;ctr<data.length;ctr++) { 
 						if (     data[ctr].TrainingLocationID== vLocationID.substring( vLocationID.indexOf('__')+2 )) {
 								vTargetLatLng=data[ctr].latLng;
 								break;
-						}							
-				}
+				}}
 				zoomTo(vTargetLatLng);
 			} 
 		}) 
@@ -315,7 +364,8 @@ d3.csv("data/CourseTrainingLocations20200601.csv", function(data) {
 					event.preventDefault();
 					$(".notFoundRow").css("display","none") ;
 					document.querySelector(".textSearchResults").style.display="none";
-					( document.querySelector(".zoomed") ) ?  document.querySelector(".zoomed").classList.remove("zoomed") : 0;
+					//( document.querySelector(".zoomed") ) ?  document.querySelector(".zoomed").classList.remove("zoomed") : 0;
+					( document.querySelector(".zoomed") ) ?  $(".zoomed").removeClass("zoomed") : 0;					
 					selectedCourse = $( "#dropdownCourses option:selected" ).val();
 					selectedSST = $( "#dropdownSST option:selected" ).val();
 					selectedLanguage = $( "#dropdownLanguages option:selected" ).val();
@@ -330,13 +380,18 @@ d3.csv("data/CourseTrainingLocations20200601.csv", function(data) {
 					removeSearchMarkers();
 					resetMapArrays(	data) ;
 					document.querySelector(".textSearchResults").style.display="none";
-					document.querySelectorAll(".notMatched").forEach( (item) => item.classList.remove("notMatched")  );
-					document.querySelectorAll(".clickedPoint").forEach( (item) => item.classList.remove("clickedPoint"));
-					( document.querySelector(".zoomed") ) ?  document.querySelector(".zoomed").classList.remove("zoomed") : 0;
+					//document.querySelectorAll(".notMatched").forEach( function(item){item.classList.remove("notMatched")});
+					//document.querySelectorAll(".clickedPoint").forEach( function(item){item.classList.remove("clickedPoint")});
+					//( document.querySelector(".zoomed") ) ?  document.querySelector(".zoomed").classList.remove("zoomed") : 0;
+					var qqq=document.querySelectorAll(".notMatched");for(i=0;i<qqq.length;i++) {$(qqq[i]).removeClass("notMatched")}
+					qqq=document.querySelectorAll(".clickedPoint");for(i=0;i<qqq.length;i++) {$(qqq[i]).removeClass("clickedPoint")}
+					qqq=document.querySelectorAll(".zoomed");for(i=0;i<qqq.length;i++) {$(qqq[i]).removeClass("zoomed")}
+
 					pointsOverlay.addTo(map);
 					map.setView(defaultLatLng, 10);
 					$(this).attr("title","Reset All");					
-					manualCollapse(removeZoomed=true)
+					//manualCollapse(removeZoomed=true)
+					manualCollapse(true)
 					$(".notFoundRow").css("display","none") ;
 					$(".searchZoomed").removeClass("searchZoomed");
 					$(".zoomed").removeClass("zoomed");
@@ -351,7 +406,12 @@ d3.csv("data/CourseTrainingLocations20200601.csv", function(data) {
 												( selectedLanguage == "all" || d.Language==selectedLanguage)
 											)}); 
 				points=[];	
-				document.querySelectorAll(".notMatched").forEach( (item) => item.classList.remove("notMatched")  );				
+				//document.querySelectorAll(".notMatched").forEach( function(item){item.classList.remove("notMatched")});				
+				var qqq=document.querySelectorAll(".notMatched");
+				for(i=0;i<qqq.length;i++){ 
+				   $(qqq[i]).removeClass("notMatched") 
+				}
+				
 							resetMapArrays(	selectedCourse_cpID) ;  
 							map.removeLayer(pointsOverlay); 
 							pointsOverlay.addTo(map);	
@@ -382,24 +442,24 @@ d3.csv("data/CourseTrainingLocations20200601.csv", function(data) {
 								})
 								var vCoursesTable = document.querySelector("#locationTable");						
 								var theparent='', loc='zzz';
-
 								for (var i=0, totRows=vCoursesTable.rows.length; i < totRows; i++ ) {
 										theparent="";
 										if ( vCoursesTable.rows[i].getAttribute("level")=="0" &&  !vBoros.has(vCoursesTable.rows[i].getAttribute("id")) ) {
-											vCoursesTable.rows[i].classList.add("notMatched") ;
+											//vCoursesTable.rows[i].classList.add("notMatched") ;
+											$(vCoursesTable.rows[i]).addClass("notMatched") ;
 										}													
 										if (  vCoursesTable.rows[i].getAttribute("level")=="1" && !vLocations.has(vCoursesTable.rows[i].getAttribute("id").substring(vCoursesTable.rows[i].getAttribute("id").indexOf('__')+2))){											
-											vCoursesTable.rows[i].classList.add("notMatched") ; 
+											//vCoursesTable.rows[i].classList.add("notMatched") ; 
+											$(vCoursesTable.rows[i]).addClass("notMatched") ; 
 										}
 										if (vCoursesTable.rows[i].getAttribute("level")=="2" ){
 													loc =vCoursesTable.rows[i].getAttribute("id").substring(vCoursesTable.rows[i].getAttribute("id").indexOf('__')+2);
 													if ( !vCourses.has(loc)  )	{
-														vCoursesTable.rows[i].classList.add("notMatched"); 
+														//vCoursesTable.rows[i].classList.add("notMatched"); 
+														$(vCoursesTable.rows[i]).addClass("notMatched"); 
 													}
 										}
-
-										if ( vCoursesTable.rows[i].getAttribute("level")=="3" ) {
-											
+										if ( vCoursesTable.rows[i].getAttribute("level")=="3" ) {	
 											whereunderscore = vCoursesTable.rows[i].getAttribute("id").indexOf('__');
 											coursesection= ( whereunderscore == -1 ) ? 											
 															vCoursesTable.rows[i].getAttribute("id") : 
@@ -408,11 +468,11 @@ d3.csv("data/CourseTrainingLocations20200601.csv", function(data) {
 											if (vCourses.has(vCoursesTable.rows[i].getAttribute("parent-id").substring( vCoursesTable.rows[i].getAttribute("parent-id").indexOf("__"))) >-1 
 												&&  vCoursesTable.rows[i].getAttribute("row-id").indexOf('__') >= 0 ) {
 														true; 
-												} else if (fullkey.has(coursesection)  ) {
+												} else if (fullkey.has(coursesection)){
 														true; 
-												}  else 	 {
-														
-														vCoursesTable.rows[i].classList.add("notMatched");
+												}  else {
+														//vCoursesTable.rows[i].classList.add("notMatched");
+														$(vCoursesTable.rows[i]).addClass("notMatched");
 											}													
 													
 //													if ( vCoursesTable.rows[i].getAttribute("parent-id").indexOf(loc) >=0  && vCoursesTable.rows[i].getAttribute("row_id").indexOf('__') >= 0 ) {
@@ -464,11 +524,8 @@ d3.csv("data/CourseTrainingLocations20200601.csv", function(data) {
 		}}  //end of zoom()
 	$(".notFoundRow button").click( function() {
 		$(".notFoundRow").css("display","none"); })
-
-	
 	map.on('resize', function(){ 
 		map.invalidateSize();	});  //end of map resize event	
-
 	function buildTblTreeElements(data, keyArray, languages) {			
 			var doTitleCase = function (theString) {  
 				theString = theString.replace(/\W\S/g, function(t) 
@@ -482,7 +539,8 @@ d3.csv("data/CourseTrainingLocations20200601.csv", function(data) {
 			var firstlocationcourse=true;
 			var providerInfo='';
 			var vglobe=document.createElement("i");
-			vglobe.classList.add("fa","fa-globe");
+			//vglobe.classList.add("fa","fa-globe");
+			$(vglobe).addClass("fa","fa-globe");
 			vglobe.setAttribute("title","Online");
 			vglobe.style.fontSize="1.2em"
 			vglobe.style.color="blue"
@@ -518,32 +576,37 @@ d3.csv("data/CourseTrainingLocations20200601.csv", function(data) {
 							var rowDateTimeInsructor=d["Start Date"]+" " + d["Start Time"] + ((d["End Time"] ) ? " - "+d["End Time"]:" ")+  //end time is sometimes missing
 							" (" + ((d.Instructor)? d.Instructor:"(tbd)") + ")";var newRow =tableRef.insertRow(-1);var newCell = newRow.insertCell(0);
 							var newSpan1 = document.createElement("span");var newText1 = document.createTextNode("Date/Time:");
-							newSpan1.appendChild(newText1);newSpan1.classList.add("detailHead");var newSpan2 = document.createElement("span");							
+							//newSpan1.appendChild(newText1);newSpan1.classList.add("detailHead");var newSpan2 = document.createElement("span");							
+							newSpan1.appendChild(newText1);$(newSpan1).addClass("detailHead");var newSpan2 = document.createElement("span");
 							var newText2 = document.createTextNode(d["Start Date"]+" " +d["Start Time"] +((d["End Time"] ) ? " - "+d["End Time"]:" ") + " (" +((d.Instructor)? d.Instructor:"(tbd)") +") "); 
 							newSpan2.appendChild(newText2);	newCell.appendChild(newSpan1);newCell.appendChild(newSpan2);							
 							newRow.setAttribute("row-id",q);newRow.setAttribute("parent-id",d.Borough+"__"+d.TrainingLocationID+"__"+d.CourseID);newRow.id=q;firstlocationcourse=false;
 							if  ( indexNum == array.length-1 || (q.substr(0,9) !=  array[indexNum+1].substr(0,9))  ) {
 								var newRow =tableRef.insertRow(-1);var newCell = newRow.insertCell(0);var newSpan1 = document.createElement("span");
-								var newText1 = document.createTextNode("Provider:");newSpan1.appendChild(newText1);newSpan1.classList.add("detailHead");
+							  //var newText1 = document.createTextNode("Provider:");newSpan1.appendChild(newText1);newSpan1.classList.add("detailHead");
+								var newText1 = document.createTextNode("Provider:");newSpan1.appendChild(newText1);$(newSpan1).addClass("detailHead");
 								var newSpan2 = document.createElement("span");var newText2 = document.createTextNode(d["Course Provider"]);
 								newSpan2.appendChild(newText2);newCell.appendChild(newSpan1);newCell.appendChild(newSpan2);newRow.setAttribute("row-id",q+"__provider");
 								newRow.setAttribute("parent-id",d.Borough+"__"+d.TrainingLocationID+"__"+d.CourseID);
 								newRow.className="providerInfo";newRow.id=q+"__provider";
 								newRow =tableRef.insertRow(-1);newCell = newRow.insertCell(0);
 								newSpan1 = document.createElement("span");newText1 = document.createTextNode("Web:");
-								newSpan1.appendChild(newText1);	newSpan1.classList.add("detailHead");newSpan2 = document.createElement("span");
+								//newSpan1.appendChild(newText1);	newSpan1.classList.add("detailHead");newSpan2 = document.createElement("span");
+								newSpan1.appendChild(newText1);	$(newSpan1).addClass("detailHead");newSpan2 = document.createElement("span");
 								var newA = document.createElement("a");newText2 = document.createTextNode(d["CourseProviderWebsite"]);
 								newA.target="_blank";newA.href=d["CourseProviderWebsite"];newA.appendChild(newText2);newSpan2.appendChild(newA);
 								newCell.appendChild(newSpan1);newCell.appendChild(newSpan2);newRow.setAttribute("row-id",q+"__website");
 								newRow.setAttribute("parent-id",d.Borough+"__"+d.TrainingLocationID+"__"+d.CourseID);
 								newRow.className="providerInfo";newRow.id=q+"__website";newRow =tableRef.insertRow(-1);newCell = newRow.insertCell(0);
 								newSpan1 = document.createElement("span");newText1 = document.createTextNode("Phone:");newSpan1.appendChild(newText1);
-								newSpan1.classList.add("detailHead");newSpan2 = document.createElement("span");newText2 = document.createTextNode(d["CourseProviderPhone"]);
+								//newSpan1.classList.add("detailHead");newSpan2 = document.createElement("span");newText2 = document.createTextNode(d["CourseProviderPhone"]);
+								$(newSpan1).addClass("detailHead");newSpan2 = document.createElement("span");newText2 = document.createTextNode(d["CourseProviderPhone"]);
 								newSpan2.appendChild(newText2);newCell.appendChild(newSpan1);newCell.appendChild(newSpan2);								
 								newRow.setAttribute("row-id",q+"__phone");newRow.setAttribute("parent-id",d.Borough+"__"+d.TrainingLocationID+"__"+d.CourseID);
 								newRow.className="providerInfo";newRow.id=q+"__phone";newRow =tableRef.insertRow(-1);newCell = newRow.insertCell(0);
 								newSpan1 = document.createElement("span");newText1 = document.createTextNode("Price:");newSpan1.appendChild(newText1);
-								newSpan1.classList.add("detailHead");newSpan2 = document.createElement("span");newText2 = document.createTextNode(d["Price"]);
+								//newSpan1.classList.add("detailHead");newSpan2 = document.createElement("span");newText2 = document.createTextNode(d["Price"]);
+								$(newSpan1).addClass("detailHead");newSpan2 = document.createElement("span");newText2 = document.createTextNode(d["Price"]);
 								newSpan2.appendChild(newText2);newCell.appendChild(newSpan1);newCell.appendChild(newSpan2);newRow.setAttribute("row-id",q+"__price");
 								newRow.setAttribute("parent-id",d.Borough+"__"+d.TrainingLocationID+"__"+d.CourseID);
 								newRow.className="providerInfo";newRow.id=q+"__price";newRow =tableRef.insertRow(-1);newCell = newRow.insertCell(0);newSpan1 = document.createElement("span");
@@ -552,4 +615,4 @@ d3.csv("data/CourseTrainingLocations20200601.csv", function(data) {
 				} 
 			})
 		} 
-// })
+})();
