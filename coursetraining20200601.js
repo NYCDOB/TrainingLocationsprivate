@@ -273,7 +273,7 @@ function removeSearchMarkers () {
 	});  //end pointsOverlay definition
 							
 //d3.csv("data/CourseTrainingLocations.csv", function(data) {
-d3.csv("https://raw.githubusercontent.com/NYCDOB/TrainingLocationsprivate/master/data/CourseTrainingLocations20200601.csv", function(data) {
+d3.csv("https://raw.githubusercontent.com/NYCDOB/TrainingLocationsprivate/master/data/CourseTrainingLocations20200624.csv", function(data) {
 	if (!data) {  //when there is a problem with the returned data
 			var element = document.createElement("h3");
 			element.appendChild(document.createTextNode("No Data Available"))
@@ -289,7 +289,7 @@ d3.csv("https://raw.githubusercontent.com/NYCDOB/TrainingLocationsprivate/master
 						var newStartTime = convertTime(d["Start Time"]);
 						d.Borough = ( !d.Borough ) ? "Unknown" : d.Borough.trim();//account for empty boro
 						d.newBoro=( d.Borough) ? boros.indexOf(d.Borough)+1 : 99; //99=unknown boro
-						d.key=	d.newBoro + d.TrainingLocationID +d.CourseID  +	newStartDate + newStartTime +d.Instructor +	d.Entry;
+						d.key=	d.newBoro + d.TrainingLocationID +d.CourseID  +	newStartDate + newStartTime +d.Instructor +d.Entry;
 						latLngs.push(latlngArr);
 									obj={};
 									obj["latLng"] = latlngArr   //[+d.Lat,+d.Long];
