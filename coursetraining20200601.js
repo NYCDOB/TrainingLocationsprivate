@@ -300,7 +300,7 @@ d3.csv("https://raw.githubusercontent.com/NYCDOB/TrainingLocationsprivate/master
 		}) ;
 		pointsOverlay.addTo(map);
 		justKeys.sort();
-		var languages = ["Arabic","Bengali","Chinese (Cantonese/Mandarin)","English","Hatian Creole",
+		var languages = ["Arabic","Bengali","Chinese","English","Hatian Creole",
 			"Georgian","Hindi","Italian","Korean","Polish","Punjabi","Russian","Spanish","Urdu"];
 		buildTblTreeElements(data, justKeys, languages);  
 		$("#locationTable").tbltree(  
@@ -401,7 +401,7 @@ d3.csv("https://raw.githubusercontent.com/NYCDOB/TrainingLocationsprivate/master
 					var selectedCourse_cpID = data.filter(function(d, index, arrayName){
 									return (	(d.CourseID == selectedCourse^selectedCourse=="allCourses") &&
 												((selectedSST=="sstYes" && d.SST=="Y"?1:0) + (selectedSST=="sstNo" && d.SST=="N"?1:0)+(selectedSST=="sstAll" ? 1:0)==1)  &&
-												( selectedLanguage == "all" || d.Language==selectedLanguage)
+												( selectedLanguage == "all" || d.Language.indexOf(selectedLanguage) > -1 )
 											)}); 
 				points=[];	
 				//document.querySelectorAll(".notMatched").forEach( function(item){item.classList.remove("notMatched")});				
