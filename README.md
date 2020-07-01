@@ -45,3 +45,5 @@
 -Add "Updated on mm/dd/yyyy" 2/26/2019
 
 -May 2020 :  Add option to filter for "online" courses
+
+-June 2020 : Chinese language filter will select any Chinese dialect
