@@ -273,7 +273,7 @@ function removeSearchMarkers () {
 	});  //end pointsOverlay definition
 							
 //d3.csv("data/CourseTrainingLocations20200723.csv", function(data) {
-d3.csv("https://raw.githubusercontent.com/NYCDOB/TrainingLocationsprivate/master/data/CourseTrainingLocations202000723.csv", function(data) {
+d3.csv("https://raw.githubusercontent.com/NYCDOB/TrainingLocationsprivate/master/data/CourseTrainingLocations20200723.csv", function(data) {
 	if (!data) {  //when there is a problem with the returned data
 			var element = document.createElement("h3");
 			element.appendChild(document.createTextNode("No Data Available"))
