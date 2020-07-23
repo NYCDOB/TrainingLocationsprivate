@@ -272,8 +272,8 @@ function removeSearchMarkers () {
 			pointsUpd.attr('r', 7 / proj.scale);  //POINT RADIUS
 	});  //end pointsOverlay definition
 							
-//d3.csv("data/CourseTrainingLocations.csv", function(data) {
-d3.csv("https://raw.githubusercontent.com/NYCDOB/TrainingLocationsprivate/master/data/CourseTrainingLocations20200624.csv", function(data) {
+//d3.csv("data/CourseTrainingLocations20200723.csv", function(data) {
+d3.csv("https://raw.githubusercontent.com/NYCDOB/TrainingLocationsprivate/master/data/CourseTrainingLocations202000723.csv", function(data) {
 	if (!data) {  //when there is a problem with the returned data
 			var element = document.createElement("h3");
 			element.appendChild(document.createTextNode("No Data Available"))
@@ -591,14 +591,14 @@ d3.csv("https://raw.githubusercontent.com/NYCDOB/TrainingLocationsprivate/master
 								newSpan1 = document.createElement("span");newText1 = document.createTextNode("Web:");
 								//newSpan1.appendChild(newText1);	newSpan1.classList.add("detailHead");newSpan2 = document.createElement("span");
 								newSpan1.appendChild(newText1);	$(newSpan1).addClass("detailHead");newSpan2 = document.createElement("span");
-								var newA = document.createElement("a");newText2 = document.createTextNode(d["CourseProviderWebsite"]);
-								newA.target="_blank";newA.href=d["CourseProviderWebsite"];newA.appendChild(newText2);newSpan2.appendChild(newA);
+								var newA = document.createElement("a");newText2 = document.createTextNode(d["CPwebsite"]);
+								newA.target="_blank";newA.href=d["CPwebsite"];newA.appendChild(newText2);newSpan2.appendChild(newA);
 								newCell.appendChild(newSpan1);newCell.appendChild(newSpan2);newRow.setAttribute("row-id",q+"__website");
 								newRow.setAttribute("parent-id",d.Borough+"__"+d.TrainingLocationID+"__"+d.CourseID);
 								newRow.className="providerInfo";newRow.id=q+"__website";newRow =tableRef.insertRow(-1);newCell = newRow.insertCell(0);
 								newSpan1 = document.createElement("span");newText1 = document.createTextNode("Phone:");newSpan1.appendChild(newText1);
-								//newSpan1.classList.add("detailHead");newSpan2 = document.createElement("span");newText2 = document.createTextNode(d["CourseProviderPhone"]);
-								$(newSpan1).addClass("detailHead");newSpan2 = document.createElement("span");newText2 = document.createTextNode(d["CourseProviderPhone"]);
+								//newSpan1.classList.add("detailHead");newSpan2 = document.createElement("span");newText2 = document.createTextNode(d["CPphone"]);
+								$(newSpan1).addClass("detailHead");newSpan2 = document.createElement("span");newText2 = document.createTextNode(d["CPphone"]);
 								newSpan2.appendChild(newText2);newCell.appendChild(newSpan1);newCell.appendChild(newSpan2);								
 								newRow.setAttribute("row-id",q+"__phone");newRow.setAttribute("parent-id",d.Borough+"__"+d.TrainingLocationID+"__"+d.CourseID);
 								newRow.className="providerInfo";newRow.id=q+"__phone";newRow =tableRef.insertRow(-1);newCell = newRow.insertCell(0);
