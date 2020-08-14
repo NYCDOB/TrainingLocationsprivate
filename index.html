@@ -5,284 +5,327 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="icon" type="image/png"  href="images/logo.png">
+	<link rel="icon" href="https://nycdob.github.io/TrainingLocationsprivate/images/logo.png">
     <link href='https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.css' rel='stylesheet' type='text/css'/>
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/opencagedata/leaflet-opencage-search@d4cbd36122efc8d17152b4177ed0e12165305441/dist/css/L.Control.OpenCageData.Search.min.css" />	
 	<link rel="stylesheet" type='text/css' href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-	<link type="text/css" href="gagiks-jquery-tbltree-bec285e/css/jquery.tbltree.css" rel="stylesheet">
+	<link href="https://nycdob.github.io/TrainingLocationsprivate/gagiks-jquery-tbltree-bec285e/css/jquery.tbltree.css" rel="stylesheet">
 	<link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
-</head>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+.fa-search {
+font-weight: boldest;
 
-	<style> <!--  TODO:   @media queries  -->
+}
+.fa-times-circle {
+color: red;
+}
+#ood {
+ position:absolute;
+ display:none;
+ top:0%;
+ left:0%; 
+ height:100%;
+ width: 100%;
+ z-index:999;
+ background-color:grey;
+ opacity:.4;
+}
+#ood span{
+display:block;
+position:relative;
+top:40%;
+font-size:4rem;
+color:yellow;
+opacity:1;
+font-weight:900;
+text-align: center;
+}
 
-		.fa-search {
-			font-weight: boldest;
-			
-			}
-		.fa-times-circle {
-			color: red;
-			}
+.clearBtn, .fltr_btn {
+float: right;
+}
 
-		.clearBtn, .fltr_btn {
-			float: right;
-		}
+.resetall:hover{
+color:white;
+font-weight:900;
+cursor:pointer;}
 
 
-		.fltr_btn:hover {
-			text-shadow:1px 1px 3px black;
-		}
+.fltr_btn:hover {
+text-shadow:1px 1px 3px black;
+}
 
-		.glyphicon-info-sign	{
-		
-			font-size: 14px;
-			color: grey;
-			top:-3px;
-			left:-3px;
-			position: relative;
-		}	
-		html,body {
-			height: 100%;
-		}
-		.navbar-brand {
-			font-size: 3rem;
-			font-weight: bold;
-			color: white;		
-		}
-		.logo {
-			background-image: url('images/dob_logo3.png');
-			background-repeat: no-repeat;
-			background-position: center;
-			float: right;
-			height: 60px;
-			width: 100px;	 
-			background-size: contain;
-		}
-		.footlinks a:hover {
-			color: red;
-			font-weight: bold;
-			text-decoration: none;
-		}
-		#map {
+.glyphicon-info-sign	{
+font-size: 14px;
+color: grey;
+top:-3px;
+left:-3px;
+position: relative;
+}	
+body {
+height: 100%;
+}
+.navbar-brand {
+font-size: 3rem;
+font-weight: bold;
+color: white;		
+}
+.logo {
+background-image: url('https://nycdob.github.io/TrainingLocationsprivate/images/dob_logo3.png');
+background-repeat: no-repeat;
+background-position: center;
+float: right;
+height: 60px;
+width: 100px;	 
+background-size: contain;
+}
+.footlinks a:hover {
+color: red;
+font-weight: bold;
+text-decoration: none;
+}
+#map {
+height: 100%; 
+width: 100%;
+background-color: #333;
+pointer-events: all;
+}
 
-			height: 100%; 
-			width: 100%;
-			background-color: #333;
-			pointer-events: all;
-		}
-		
-		div.tooltip {
-			font-size: 1em;
-			color: black  ; /*#222;*/
-			background: #F8F8F8;  /*   #fff;   */
-			padding: 1em;
-			border: 2px solid #2A293E;
+div.tooltip {
+font-size: 1em;
+color: black  ; /*#222;*/
+background: #F8F8F8;  /*   #fff;   */
+padding: 1em;
+border: 2px solid #2A293E;
 
-			border-radius: 2px; 
+border-radius: 2px; 
 
-			opacity: 1 ;  /*0.9;  */
-			position: absolute;
-			visibility: hidden;
-			font-family: 'Roboto', sans-serif;
-		}
-		div.tooltip span:first-child {
-				font-weight: bolder;
-				font-size: 1.2em;
-				text-decoration: underline;
-		}
-		.point:not(.clickedPoint){
-			fill: #e87800;   /*  orange-ish  */
-			fill-opacity: .7;
-		}
-		
-		
-		.point.clickedPoint {
-			fill: #0000ff;  /*  blue-ish  */
-			fill-opacity: 1;
-		}			
-		
-		
-		.clickAddress {
-			fill: #0000ff;  /*  blue-ish  */
-			fill-opacity: 1;
-		}
-		
-		#tbl_heading {
-			font-size: 20px;
-			padding: 5px 20px;
-			color: deepskyblue;
-			font-weight: bolder;
-		}
-		#tbl_heading button {
-			font-size: 12px;
-		}
-		
-		#map-container{
-			height: 81vh;
-			width: 100%;
-			border: 3px solid black;
-			position: relative;
-			display: block;
-		}
-		
-		.table-wrapper {
-			border: 3px solid black;
-			height: 81vh;
-			width: 100%;
-		}
-		.courseHeading {
-			background-color: #7a7a7a;
-			color: #ffffff;
-			font-style: italic; 
-			font-weight: bold;	
-		}
-		#dropdownCourses {
-		  max-width: 40%;
-		}
-		#filterTxt {
-			font-size: 18px;
-			font-weight: 800;
-			color: #46A6DD;
-		}
-		
-		
-		tr[is-leaf='false'] td:last-child {
-				cursor:pointer;
-		}
-		tr[level='0'] {
-			font-weight: bolder;
-			font-size:1.1em;
-		}
-		tr[level='2'] td :last-child {
-				font-weight: normal ;
-		}
-		tr[level='1'] {
-			color: #383838;
-			font-weight: bold;
-		}
-		tr[level='3'] {
-			font-size: .75em;
-		}
-		td:hover, tr:hover { 
-			background-color: #F5F5F5;
-			color: #e87800;
-		}
-		#loadpage {
-			position:absolute;
-			left:30%; 
-			top:40%; 
-			background-color:white;
-			layer-background-color:white;
-			width:auto;
-		}
-		.modal-header {
-		  background: #ececec;
-		  font-family: Oswald,sans-serif;
-		  color: #000;
-		}
-		.notFoundRowx  {
-			font-size: 1.2em;
-			padding-left:10px;
-			padding: 5px 10px; 
-			border: 2px solid red;
-			border-radius:10px;
-			background-color:#ffcccc;
-			z-index: 1000;  /* ??  */
-		}
+opacity: 1 ;  /*0.9;  */
+position: absolute;
+visibility: hidden;
+font-family: 'Roboto', sans-serif;
+}
+div.tooltip span:first-child {
+font-weight: bolder;
+font-size: 1.2em;
+text-decoration: underline;
+}
+.point:not(.clickedPoint){
+fill: #e87800;   /*  orange-ish  */
+fill-opacity: .7;
+}
 
-		.notFoundRow span {
-			font-weight: bold;
-			margin-left: 15px;
-			margin-right: 15px;
-		}
-		#searchCourse {
 
-			font-size:1.3em;
-		}
+.point.clickedPoint {
+fill: #0000ff;  /*  blue-ish  */
+fill-opacity: 1;
+}			
 
-		#searchCourse span {
 
-		}
-		
-		#searchCourse label {
-			font-weight: 700;
-			color:#666666;
-		}
+.clickAddress {
+fill: #0000ff;  /*  blue-ish  */
+fill-opacity: 1;
+}
 
-		#searchCourse button, #clr_btn {
-			padding: 2px 3px 2px 3px;
-			background: #46A6DD;
-			color: white;
-			font-size: 14px;
-			display: inline-block;
-		}
-		
-		#searchCourse button:hover ,
-		#clr_btn:hover {
-			background: #002878;
-		}
-		
-		table {
-			font-size: 1.3em;
-			width: 100%;
-		}
-				
+#tbl_heading {
+font-size: 20px;
+padding: 5px 20px;
+color: deepskyblue;
+font-weight: bolder;
+}
+#tbl_heading button {
+font-size: 12px;
+}
 
-		.detailHead {
+#map-container{
+height: 79vh;
+width: 100%;
+border: 3px solid black;
+position: relative;
+display: block;
+}
 
-			width: 15%;
-			display: inline-block;
-			position: relative;
-		}		
-			
-		.removemarkerbutton {
-				font-weight:bold
-		}
-			
-		
-		.removemarkerbutton:hover {
-			color: red;
-		}
-		
-			
-		.zoomed {
-			background-color: #e0e0e0;
-		}
-		.searchZoomed {
-			background-color: #e0e0e0;
-		}
-		/* tr:not(.zoomed) {  */
-		tr:not(.zoomed):not(.searchZoomed) {  
-			background-color: transparent;
-		}
-	.textSearchResults {
-		display: none;
-		color: red;
-		font-weight:bold;
-		font-size: .75em;
-	}
-	.notMatched {
-		display: none !important;
-	}
-	@media (max-width: 991px) {
+#map-container2{
+height: 79vh;	
+width: 100%;
+z-index:99999;
+opacity: .1;
+border: 3px solid black;
+position: relative;
+display: block;
+}
+
+
+.table-wrapper {
+border: 3px solid black;
+height: 79vh;
+width: 100%;
+}
+.courseHeading {
+background-color: #7a7a7a;
+color: #ffffff;
+font-style: italic; 
+font-weight: bold;	
+}
+#filterTxt {
+font-size: 18px;
+font-weight: 800;
+color: #46A6DD;
+}
+
+
+tr[is-leaf='false'] td:last-child {
+cursor:pointer;
+}
+tr[level='0'] {
+font-weight: bolder;
+font-size:1.1em;
+}
+tr[level='2'] td :last-child {
+font-weight: normal ;
+}
+tr[level='1'] {
+color: #383838;
+font-weight: bold;
+}
+tr[level='3'] {
+font-size: .75em;
+}
+td:hover, tr:hover { 
+background-color: #F5F5F5;
+color: #e87800;
+}
+#loadpage {
+position:absolute;
+left:30%; 
+top:40%; 
+background-color:white;
+layer-background-color:white;
+width:auto;
+}
+.modal-header {
+background: #ececec;
+font-family: Oswald,sans-serif;
+color: #000;
+}
+.notFoundRowx  {
+font-size: 1.2em;
+padding-left:10px;
+padding: 5px 10px; 
+border: 2px solid red;
+border-radius:10px;
+background-color:#ffcccc;
+z-index: 1000;  /* ??  */
+}
+
+.notFoundRow span {
+font-weight: bold;
+margin-left: 15px;
+margin-right: 15px;
+}
+
+.searchCourse {
+font-size:1.3em;
+}
+
+
+.searchCourse label {
+font-weight: 900;
+color:#black;
+margin-bottom: 0px !important;
+}
+
+
+.searchCourse button {
+background: #46A6DD;
+color: white;
+font-size: 14px;
+zdisplay: inline-block;
+}
+
+
+#clr_btn {
+background: #46A6DD;
+color: white;
+font-size: 14px;
+display: inline-block;
+}
+
+.searchCourse button:hover ,
+#clr_btn:hover {
+background: #002878;
+}
+
+table {
+width: 100%;
+}
+tr {white-space:nowrap;}
+
+.detailHead {
+
+width: 15%;
+display: inline-block;
+position: relative;
+}		
+
+.removemarkerbutton {
+font-weight:bold
+}
+
+
+.removemarkerbutton:hover {
+color: red;
+}
+
+
+.zoomed {
+background-color: #e0e0e0;
+}
+
+
+.searchZoomed {
+background-color: #e0e0e0;
+}
+
+tr:not(.zoomed):not(.searchZoomed) {  
+background-color: transparent;
+}
+
+.textSearchResults {
+display: none;
+color: red;
+font-weight:bold;
+font-size: .75em;
+}
+.notMatched {
+display: none !important;
+}
+
+z*{border:1px solid red}
+
+@media (max-width: 991px) {
 		.feedback {
-				float: none !important;
+		float: none !important;
 		}
-	}
+}
 
-	@media (max-width: 600px) {
+@media (max-width: 600px) {
 		li {
-			text-align: center !important;
-			font-size: .65em;				
+		text-align: center !important;
+		font-size: .65em;				
 		}
 		.fltr_btn, .clearBtn {
-				float:none !important;
+		float:none !important;
 		}
 		div.tooltip {
-			display: none;					
+		display: none;					
 		}	
-	}
+}
+
 		
 </style>
+</head>
 <body>
 <div class="container-fluid">
 	<header>
@@ -295,12 +338,12 @@
 				</div>
 			  </nav>		
 	</header>
-	<div class="row" style="margin-bottom: 5px; padding-top:5px;padding-bottom:5px;" > 
-				<div class="col-md-8" > 
-						<div style="padding-left:10px;padding: 5px 10px; border: 1px solid #b8b8b8;border-radius:10px;background-color:#f8f8f8">  <!-- put a frame around search  -->  							
-							<form class="" id="searchCourse"> 
+	<div class="row" style="margin:5px 0px;font-size:.75em;border: 1px solid #b8b8b8;border-radius:5px;background-color:#f8f8f8;
+	    padding: 10px 0px 5px;" > 
+				 <form class="searchCourse" id="zsearchCourse" style=""> 							
+								<div class="col-md-5">
 									<label for="">Course:</label>
-									<select id="dropdownCourses" >											
+									<select id="dropdownCourses" style="max-width:100%" >											
 										<option value='allCourses' selected>All Courses</option>
 										<option class='courseHeading' value='' disabled>CONCRETE COURSES</option>
 										<option value='C01'>30-Hour Concrete Safety Manager</option>
@@ -378,18 +421,23 @@
 										<option value='C65'>2-Hour Drug and Alcohol Awareness</option>
 										<option value='C66'>8-Hour Fall Prevention</option>
 									</select>									
+								</div>
+
+								<div class="col-md-2">
 									<label for="">SST Status:</label>
 											<select id="dropdownSST" >
 												<option value="sstAll" selected>Any</option>
 												<option value="sstYes">Only SST</option>	
 												<option value="sstNo">Non-SST</option>
 											</select>
-										<label for="">Language: </label>
+								</div>
+								<div class="col-md-3">
+									<label for="">Language: </label>
 												<select id="dropdownLanguages" >
 														<option value="all">All</option>
 														<option value="Arabic">Arabic</option>
 														<option value="Bengali">Bengali</option>
-														<option value="Chinese (Cantonese/Mandarin)">Chinese (Cantonese/Mandarin)</option>
+														<option value="Chinese">Chinese (Cantonese/Mandarin)</option>
 														<option value="English">English</option>
 														<option value="Hatian Creole">Hatian Creole</option>
 														<option value="Georgian">Georgian</option>
@@ -402,18 +450,27 @@
 														<option value="Spanish">Spanish</option>
 														<option value="Urdu">Urdu</option>										
 												</select>
-								<button class="fltr_btn" id="submit_btn">Search</button>
-							</form>								
-					</div>  <!-- end frame around search  -->
-				</div>
-				<div class="col-md-4" > 
-							<!--  <button class="filterBtn" title="Search"   id="fltr_btn" > APPLY </button>   -->
-							<button class="clearBtn"  id="clr_btn" style="margin-top: 10px "> Reset All </button>
-				</div>
+								</div>
+<!--
+								<div class="col-md-1">
+										<label >Online? </label>
+										<input id="onlinecheck" type="checkbox" style="transform: scale(1.5);-webkit-transform: scale(1.5);"></input>	
+								</div>		
+-->								
+								<div class="col-md-1" style="margin-top:-5px;">								
+									<div class="row">
+											<div class="col-md-5">
+												<i class="fa fa-search fltr_btn" id="submit_btn" title="Filter" style="color:blue;padding-left:0px;font-size:2em"></i>
+											</div>											
+											<div class="col-md-1 resetall">
+												<i class="fa fa-undo col-md-1 resetall" title="Reset All" style="color:blue;padding-left:0px;font-size:2em"></i>
+											</div>
+									</div>
+								</div>
+				</form>								
 	</div>
-
-	<div class="row notFoundRow" style="margin-bottom: 5px; padding-top:5px;padding-bottom:5px;display:none;position: absolute: top: 1px;z-index:999;" > 
-				<div class="col-md-12" > 
+	<div class="row notFoundRow" style="margin-bottom: 5px; padding-top:5px;padding-bottom:5px;display:none;top: 1px;z-index:999;" > 
+					<div class="col-md-12" > 
 					<div class="notFoundRowx" >  <!-- put a frame around search  -->  
 									<button type="button" title="Dismiss" class="close" aria-label="Close"><span class="glyphicon glyphicon-remove"></span></button>
 									<div class="row">
@@ -421,82 +478,80 @@
 													<span style="padding-right:15px;"><strong>No Courses Found:</strong></span>
 											</div>
 											<div class="col-md-9">
-													Course: 	<span class="notFoundCourse"></span><span>|</span>
-													SST: 		<span class="notFoundSST"></span><span>|</span>
-													Language:	<span class="notFoundLanguage"></span>
+						Course: 	<span class="notFoundCourse"></span><span>|</span>
+						SST: 		<span class="notFoundSST"></span><span>|</span>
+						Language:	<span class="notFoundLanguage"></span>
 											</div>
 									</div>
 									
-					</div>  <!-- end frame around search  -->
+					</div>  
 				</div>
 	</div>
 	<div class="row" >
 		<div class="col-md-8" >
 			<div class="" id="map-container" >
-				<div id="map">
+							
+				<div id="map" style="position:relative">
+				  <div id="ood">
+				  <span ></span></div>
 				</div>
-			</div>
-		</div>   <!--  end div col-md-8 -->
+			</div>			
+		</div>   
 		
-		<div class="col-md-4" >  <!--   -->
+		<div class="col-md-4" > 
 			<div class="table-wrapper" style="overflow-y:auto"  >
 					<div id="tbl_heading" style="border-bottom:1px solid #F0F0F0;text-align: center;">
 										<span>Locations and Courses
 										<a title="See Approved Courses" target="_blank " href="https://www1.nyc.gov/site/buildings/industry/dob-approved-courses.page"><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span></a>
-
 										</span>
 										<br>
-										<span class="textSearchResults" >**Search Results**</span>
-										
-					</div>
-
-								<div id="loadpage"> 
-									  <p align="center" style="font-size: large;">       
-										<b>Loading ... Please wait!</b><br/><br/><img src="images/spinner.gif">
-									  </p>
-								</div>	
-								<table id="locationTable" class="tree" style="visibility:hidden;">	
-											<!--  placeholder for dynamic table content -->
-								</table>
-
+										<span class="textSearchResults"></span>
+				</div>
+				<div id="loadpage"> 
+					  <p align="center" style="font-size: large;">       
+						<b>Loading ... Please wait!</b><br/><br/><img src="images/spinner.gif">
+					  </p>
+				</div>	
+				<table id="locationTable" class="tree" style="visibility:hidden;">	
+				</table>
 			</div>				  
 		</div> 
-	</div> 
+	</div>
 	<footer>
 	<div class="row" style="margin-top: 5px">
 		<div class="col-md-8">
 			Built by DOB Analytics <a target="_blank" href="https://www1.nyc.gov/site/buildings/about/metrics-reports.page">Dev Squad</a>
 		</div>
-		
 		<div class="col-md-2 ">
-			Updated on 3/24/2020
+			Last Updated <span>08/12/2020</span>
 		</div>
 		<div class="col-md-2 ">
 			<div class="pull-right feedback"><a target="_blank" href="https://www.surveymonkey.com/r/W35368J">Feedback</a></div>
 		</div>		
 	</div>
 	</footer>
-
+	
 </div>  <!--  end main container fluid -->
 <!-- ****************************************************************************************************** -->
 <!-- 												JS RESOURCES											-->
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.js"></script>
 	<!-- address search -->
-	<!--  script src="https://cdn.jsdelivr.net/gh/opencagedata/leaflet-opencage-search@d4cbd36122efc8d17152b4177ed0e12165305441/dist/js/L.Control.OpenCageSearch.min.js"></script  -->
     <script src="https://cdn.jsdelivr.net/gh/opencagedata/leaflet-opencage-search@1.3.0/dist/js/L.Control.OpenCageSearch.min.js"></script>		
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.4.9/d3.min.js"></script>		
 	<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
-	<!--   script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.1/jquery-ui.min.js"></script   -->
 	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
-	<script src="Leaflet.D3SvgOverlay-master/L.D3SvgOverlay.min.js"></script>	
+	<script src="https://nycdob.github.io/TrainingLocationsprivate/Leaflet.D3SvgOverlay-master/L.D3SvgOverlay.min.js"></script>	
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-	<script type="text/javascript" src="gagiks-jquery-tbltree-bec285e/js/jquery.tbltree.js"></script>
-	<script type="text/javascript" src="coursetraining.js"></script>
+	<script src="https://nycdob.github.io/TrainingLocationsprivate/gagiks-jquery-tbltree-bec285e/js/jquery.tbltree.js"></script>
+<!--	<script src="https://nycdob.github.io/TrainingLocationsprivate/coursetraining20200601.js"></script>  -->
+	<script src="coursetrainingjs.js"></script>
 
 <script>
 {
-	let bodyPadding = $(".navbar-fixed-top").height()+5;
-	document.body.style.paddingTop=bodyPadding+"px";
+$('body').scrollTop(0);
+window.scrollTo(0,0)
+	let bodyPadding = $(".navbar-fixed-top").height()+0;
+	document.body.style.marginTop=bodyPadding+"px";
 }
 </script>	
 </body>
