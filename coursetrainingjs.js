@@ -272,7 +272,7 @@ function removeSearchMarkers () {
 			pointsUpd.attr('r', 7 / proj.scale);  //POINT RADIUS
 	});  //end pointsOverlay definition
 							
-d3.csv("https://raw.githubusercontent.com/NYCDOB/TrainingLocationsprivate/master/data/CourseTrainingLocations20201202.csv", function(data) {
+d3.csv("https://raw.githubusercontent.com/NYCDOB/TrainingLocationsprivate/master/data/CourseTrainingLocations20210104.csv", function(data) {
 	if (!data) {  //when there is a problem with the returned data
 			var element = document.createElement("h3");
 			element.appendChild(document.createTextNode("No Data Available"))
