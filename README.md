@@ -47,3 +47,5 @@
 -May 2020 :  Add option to filter for "online" courses
 
 -June 2020 : Chinese language filter will select any Chinese dialect
+
+-Two new courses: "40-Hour Hoisting Machine Operator" and "8-Hour Hoisting Machine Operator Refresher" 
